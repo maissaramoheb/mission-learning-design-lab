@@ -110,6 +110,8 @@ export function TrainingDesignBuilder({
         </h2>
         <p className="mt-3 max-w-4xl text-lg leading-8 text-slate-700">
           Now convert your work into a coherent 15-minute mini-training design.
+          This is a training-design exercise, not only a tactical
+          problem-solving exercise.
         </p>
       </div>
 

@@ -57,51 +57,51 @@ export function StepLayout({
     <div className="relative min-h-screen overflow-hidden">
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[linear-gradient(rgba(75,146,219,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(75,146,219,0.08)_1px,transparent_1px)] bg-[size:42px_42px]" />
       <header className="no-print border-b border-white/20 bg-navy-900 text-white shadow-[0_18px_60px_rgba(8,31,59,0.18)]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-5 lg:px-8">
-          <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr] xl:items-stretch">
-            <div className="rounded-3xl border border-white/15 bg-white/[0.07] p-5 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-4 lg:px-8">
+          <div className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr] xl:items-stretch">
+            <div className="rounded-[1.5rem] border border-white/15 bg-white/[0.07] p-4 backdrop-blur">
               <div className="flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-un-line">
                 <Shield size={18} aria-hidden />
                 {APP_TITLE}
               </div>
-              <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="mt-3 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                   <p className="text-sm font-bold uppercase text-un-line">
                     {eyebrow ?? "Current phase"}
                   </p>
-                  <h1 className="mt-1 text-3xl font-bold md:text-5xl">{title}</h1>
+                  <h1 className="mt-1 text-3xl font-bold md:text-4xl">{title}</h1>
                 </div>
-                <div className="rounded-2xl border border-white/15 bg-white/[0.08] px-4 py-3">
+                <div className="rounded-2xl border border-white/15 bg-white/[0.08] px-4 py-2.5">
                   <p className="text-xs font-bold uppercase text-un-line">Progress</p>
-                  <p className="text-3xl font-bold">{progressPercent}%</p>
+                  <p className="text-2xl font-bold">{progressPercent}%</p>
                 </div>
               </div>
               {description ? (
-                <p className="mt-4 max-w-4xl text-lg leading-8 text-white/80">
+                <p className="mt-3 max-w-4xl text-base leading-7 text-white/80">
                   {description}
                 </p>
               ) : null}
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-              <div className="rounded-3xl border border-white/15 bg-white/[0.09] p-5 backdrop-blur">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-4 backdrop-blur">
                 <div className="flex items-center gap-3">
-                  <Signal className="text-un-line" size={22} aria-hidden />
+                  <Signal className="text-un-line" size={20} aria-hidden />
                   <div>
                     <p className="text-xs font-bold uppercase text-un-line">
                       Command centre
                     </p>
-                    <p className="text-lg font-bold">UN Mission Training Operations Room</p>
+                    <p className="text-base font-bold">UN Mission Training Operations Room</p>
                   </div>
                 </div>
-                <p className="mt-4 text-base leading-7 text-white/75">{MAIN_TAGLINE}</p>
+                <p className="mt-3 text-sm leading-6 text-white/75">{MAIN_TAGLINE}</p>
               </div>
-              <div className="rounded-3xl border border-white/15 bg-white/[0.09] p-5 backdrop-blur">
+              <div className="rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-4 backdrop-blur">
                 <div className="flex items-start gap-3">
                   {saveStatus === "saving" ? (
-                    <Database className="mt-1 text-un-line" size={22} aria-hidden />
+                    <Database className="mt-1 text-un-line" size={20} aria-hidden />
                   ) : (
-                    <CheckCircle2 className="mt-1 text-un-line" size={22} aria-hidden />
+                    <CheckCircle2 className="mt-1 text-un-line" size={20} aria-hidden />
                   )}
                   <div>
                     <p className="text-sm font-bold text-white">{saveLabel}</p>
@@ -115,7 +115,7 @@ export function StepLayout({
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
+      <main className="mx-auto max-w-7xl px-5 py-6 lg:px-8">
         <motion.section
           key={step}
           initial={{ opacity: 0, y: 12 }}

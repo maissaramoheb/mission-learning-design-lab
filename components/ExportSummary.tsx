@@ -138,7 +138,7 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-lg border border-field-border bg-white px-4 py-3 font-bold text-navy-800 hover:border-un-blue"
+            className="inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
           >
             <Printer size={18} aria-hidden />
             Print
@@ -146,7 +146,7 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
           <button
             type="button"
             onClick={copySummary}
-            className="inline-flex items-center gap-2 rounded-lg border border-field-border bg-white px-4 py-3 font-bold text-navy-800 hover:border-un-blue"
+            className="inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
           >
             <ClipboardCopy size={18} aria-hidden />
             Copy Summary
@@ -154,7 +154,7 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
           <button
             type="button"
             onClick={downloadJson}
-            className="inline-flex items-center gap-2 rounded-lg border border-field-border bg-white px-4 py-3 font-bold text-navy-800 hover:border-un-blue"
+            className="inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
           >
             <Download size={18} aria-hidden />
             Download JSON
@@ -162,7 +162,7 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
           <button
             type="button"
             onClick={confirmReset}
-            className="inline-flex items-center gap-2 rounded-lg bg-red-700 px-4 py-3 font-bold text-white hover:bg-red-800"
+            className="inline-flex items-center gap-2 rounded-xl bg-red-700 px-4 py-3 font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-md"
           >
             <RotateCcw size={18} aria-hidden />
             Reset Data

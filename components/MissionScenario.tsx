@@ -74,9 +74,9 @@ export function MissionScenario({ data, updateData }: MissionScenarioProps) {
             <div>
               <h3 className="text-xl font-bold text-navy-900">Important instruction</h3>
               <p className="mt-2 text-lg leading-8 text-slate-700">
-                This is not only a tactical problem-solving exercise. Your main
-                task is to design how you would train newly deployed officers to
-                respond.
+                This is a training-design exercise, not only a tactical
+                problem-solving exercise. Your main task is to design how you
+                would train newly deployed officers to respond.
               </p>
             </div>
           </div>

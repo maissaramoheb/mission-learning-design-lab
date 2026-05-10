@@ -30,13 +30,13 @@ import { isGroupSetupValid, isPresentationReady } from "@/lib/validation";
 
 const steps: StepDefinition[] = [
   { key: "welcome", label: "Welcome", shortLabel: "Welcome" },
-  { key: "setup", label: "Group Setup", shortLabel: "Setup" },
-  { key: "scenario", label: "Mission Scenario", shortLabel: "Scenario" },
-  { key: "behaviourist", label: "Behaviourist", shortLabel: "Rules" },
-  { key: "social", label: "Social Cognitive", shortLabel: "Model" },
-  { key: "constructivist", label: "Constructivist", shortLabel: "Build" },
-  { key: "builder", label: "Training Design", shortLabel: "Design" },
-  { key: "presentation", label: "Presentation", shortLabel: "Present" },
+  { key: "setup", label: "Setup", shortLabel: "Setup" },
+  { key: "scenario", label: "Scenario", shortLabel: "Scenario" },
+  { key: "behaviourist", label: "Rules", shortLabel: "Rules" },
+  { key: "social", label: "Model", shortLabel: "Model" },
+  { key: "constructivist", label: "Build", shortLabel: "Build" },
+  { key: "builder", label: "Design", shortLabel: "Design" },
+  { key: "presentation", label: "Present", shortLabel: "Present" },
   { key: "export", label: "Export", shortLabel: "Export" }
 ];
 

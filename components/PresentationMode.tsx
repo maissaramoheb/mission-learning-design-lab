@@ -247,7 +247,7 @@ export function PresentationMode({
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Timer seconds={180} label="3-minute presentation" />
+            <Timer seconds={180} label="Presentation time" />
             <button
               type="button"
               onClick={onSummary}
@@ -282,7 +282,7 @@ export function PresentationMode({
               {currentSlide.title}
             </h1>
 
-            <div className="mt-10 grid gap-5">
+            <div className="mt-8 grid gap-4">
               {currentSlide.content.map((item, index) => (
                 <article
                   key={`${item.label ?? "content"}-${index}`}

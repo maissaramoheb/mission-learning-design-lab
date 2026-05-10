@@ -139,7 +139,8 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
               Local browser workspace
             </h3>
             <p className="mt-2 text-lg leading-8 text-slate-700">
-              Your group work is saved only on this laptop/browser.
+              Open one workspace per group. Your work is saved only on this
+              laptop/browser.
             </p>
           </div>
         </div>

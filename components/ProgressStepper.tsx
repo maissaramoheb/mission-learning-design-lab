@@ -20,7 +20,7 @@ export function ProgressStepper({
   return (
     <nav
       aria-label="Activity progress"
-      className="no-print rounded-3xl border border-white/15 bg-white/[0.08] p-3 backdrop-blur"
+      className="no-print rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-2 backdrop-blur"
     >
       <ol className="grid gap-2 md:grid-cols-3 xl:grid-cols-9">
         {steps.map((step, index) => {
@@ -32,8 +32,9 @@ export function ProgressStepper({
               <button
                 type="button"
                 onClick={() => onStepClick(step.key)}
+                title={step.label}
                 className={cn(
-                  "group flex h-full w-full items-center gap-2 rounded-2xl border px-3 py-3 text-left text-sm transition",
+                  "group flex h-full w-full items-center gap-2 rounded-2xl border px-3 py-2 text-left text-sm transition",
                   isActive &&
                     "border-un-line bg-white text-navy-900 shadow-lg shadow-navy-900/15 ring-2 ring-un-line/50",
                   !isActive &&
@@ -46,7 +47,7 @@ export function ProgressStepper({
               >
                 <span
                   className={cn(
-                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold transition group-hover:scale-105",
+                    "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold transition group-hover:scale-105",
                     isActive && "border-un-blue bg-un-blue text-white shadow-sm",
                     isComplete && !isActive && "border-un-line bg-white text-un-blue",
                     !isActive &&
@@ -57,8 +58,7 @@ export function ProgressStepper({
                   {isComplete ? <Check aria-hidden size={14} /> : index + 1}
                 </span>
                 <span className="min-w-0">
-                  <span className="hidden truncate font-bold xl:block">{step.label}</span>
-                  <span className="truncate font-bold xl:hidden">{step.shortLabel}</span>
+                  <span className="block truncate font-bold">{step.label}</span>
                 </span>
               </button>
             </li>

@@ -77,6 +77,10 @@ export function ConstructivistPhase({
           activity. Use your operational experience, but convert it into a
           trainable activity for newly deployed officers.
         </p>
+        <p className="mt-3 rounded-xl border border-un-line bg-white px-4 py-3 text-lg font-semibold leading-8 text-navy-900">
+          This is a training-design exercise, not only a tactical
+          problem-solving exercise.
+        </p>
       </div>
 
       <section className="grid gap-6">
