@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/FormElements";
+import { QRCodeAccessCard } from "@/components/QRCodeAccessCard";
 import {
   APP_TITLE,
   MAIN_TAGLINE,
@@ -41,6 +42,9 @@ const theories = [
     body: "Scenario analysis. Experience. Group-built solution."
   }
 ];
+
+const liveWorkspaceUrl =
+  "https://mission-learning-design-nm7eoczna-delta4ce20-5830s-projects.vercel.app/";
 
 export function Welcome({ onStart }: WelcomeProps) {
   return (
@@ -116,36 +120,44 @@ export function Welcome({ onStart }: WelcomeProps) {
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <div className="rounded-2xl border border-field-border bg-field-mist p-5">
-          <div className="flex gap-3">
-            <QrCode className="mt-1 text-un-blue" size={24} aria-hidden />
-            <div>
-              <h3 className="text-xl font-bold text-navy-900">
-                Open one workspace per group
-              </h3>
-              <p className="mt-2 text-lg leading-8 text-slate-700">
-                Open this app on one laptop per group. Use the shared link or QR
-                code.
-              </p>
+      <section className="grid gap-4 xl:grid-cols-[1fr_1fr_0.95fr]">
+        <div className="grid gap-4 lg:grid-cols-2 xl:col-span-2">
+          <div className="rounded-2xl border border-field-border bg-field-mist p-5">
+            <div className="flex gap-3">
+              <QrCode className="mt-1 text-un-blue" size={24} aria-hidden />
+              <div>
+                <h3 className="text-xl font-bold text-navy-900">
+                  Open one workspace per group
+                </h3>
+                <p className="mt-2 text-lg leading-8 text-slate-700">
+                  Open this app on one laptop per group. Use the shared link or
+                  QR code.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-field-border bg-white p-5">
+            <div className="flex gap-3">
+              <BadgeCheck className="mt-1 text-un-blue" size={24} aria-hidden />
+              <div>
+                <h3 className="text-xl font-bold text-navy-900">
+                  Classroom-ready group workflow
+                </h3>
+                <p className="mt-2 text-lg leading-8 text-slate-700">
+                  Select members, assign roles, build the training design, and
+                  brief from Presentation Mode.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-field-border bg-white p-5">
-          <div className="flex gap-3">
-            <BadgeCheck className="mt-1 text-un-blue" size={24} aria-hidden />
-            <div>
-              <h3 className="text-xl font-bold text-navy-900">
-                Classroom-ready group workflow
-              </h3>
-              <p className="mt-2 text-lg leading-8 text-slate-700">
-                Select members, assign roles, build the training design, and
-                brief from Presentation Mode.
-              </p>
-            </div>
-          </div>
-        </div>
+        <QRCodeAccessCard
+          url={liveWorkspaceUrl}
+          title="Scan to Open Workspace"
+          subtitle="Open one workspace per group."
+        />
       </section>
 
       <footer className="border-t border-field-border pt-5 text-sm font-semibold text-slate-600">
