@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  background: #f5f7fa;
+  color: #11243a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(8, 31, 59, 0.12), rgba(234, 244, 255, 0.92) 38%, rgba(245, 247, 250, 0.9)),
+    linear-gradient(rgba(75, 146, 219, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75, 146, 219, 0.06) 1px, transparent 1px),
+    #f5f7fa;
+  background-size: auto, 42px 42px, 42px 42px;
+  color: #11243a;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+::selection {
+  background: rgba(75, 146, 219, 0.24);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(75, 146, 219, 0.38);
+  outline-offset: 2px;
+}
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block;
+  }
+
+  .print-area {
+    display: block !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-footer {
+    display: block !important;
+    margin-top: 24px;
+    border-top: 1px solid #111111;
+    padding-top: 10px;
+    color: #111111;
+    font-size: 12px;
+  }
+
+  .print-break {
+    break-before: page;
+  }
+
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+}
