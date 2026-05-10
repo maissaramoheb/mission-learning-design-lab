@@ -13,6 +13,7 @@ import type { ActivityData, Roles } from "@/types/activity";
 import { FieldShell, SelectInput, TextInput } from "@/components/FormElements";
 import { cn, toggleInArray } from "@/lib/utils";
 import { isGroupSetupValid } from "@/lib/validation";
+import { groupIdentities } from "@/lib/groupIdentity";
 
 type GroupSetupProps = {
   data: ActivityData;
@@ -147,16 +148,34 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
       </section>
 
       <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-        <FieldShell
-          label="Group Name"
-          helper="Required. Example: Group 1 / Alpha Team / Blue Team"
-        >
-          <TextInput
-            value={data.groupName}
-            onChange={(groupName) => updateData({ groupName })}
-            placeholder="Group 1"
-          />
-        </FieldShell>
+        <div className="space-y-3">
+          <FieldShell
+            label="Group Name"
+            helper="Required. Use Alpha, Bravo, or Charlie for the clearest group identity."
+          >
+            <TextInput
+              value={data.groupName}
+              onChange={(groupName) => updateData({ groupName })}
+              placeholder="Alpha Team"
+            />
+          </FieldShell>
+          <div className="flex flex-wrap gap-2">
+            {groupIdentities.map((identity) => (
+              <button
+                key={identity.key}
+                type="button"
+                onClick={() => updateData({ groupName: identity.title })}
+                className={cn(
+                  "rounded-full border px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
+                  identity.tone,
+                  data.groupName === identity.title && "ring-2 ring-un-line"
+                )}
+              >
+                {identity.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="rounded-2xl border border-un-line bg-un-light p-5 shadow-sm">
           <div className="flex items-start gap-3">

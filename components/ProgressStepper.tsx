@@ -3,6 +3,7 @@
 import { Check } from "lucide-react";
 import type { StepDefinition, StepKey } from "@/types/activity";
 import { cn } from "@/lib/utils";
+import { getPhaseStyle } from "@/lib/phaseStyles";
 
 type ProgressStepperProps = {
   steps: StepDefinition[];
@@ -26,6 +27,7 @@ export function ProgressStepper({
         {steps.map((step, index) => {
           const isActive = step.key === currentStep;
           const isComplete = index < currentIndex;
+          const phase = getPhaseStyle(step.key);
 
           return (
             <li key={step.key}>
@@ -33,6 +35,7 @@ export function ProgressStepper({
                 type="button"
                 onClick={() => onStepClick(step.key)}
                 title={step.label}
+                style={isActive ? { borderColor: phase.color } : undefined}
                 className={cn(
                   "group flex h-full w-full items-center gap-2 rounded-2xl border px-3 py-2 text-left text-sm transition",
                   isActive &&
@@ -54,6 +57,11 @@ export function ProgressStepper({
                       !isComplete &&
                       "border-white/20 bg-white/[0.06] text-white/70"
                   )}
+                  style={
+                    isActive
+                      ? { backgroundColor: phase.color, borderColor: phase.color }
+                      : undefined
+                  }
                 >
                   {isComplete ? <Check aria-hidden size={14} /> : index + 1}
                 </span>

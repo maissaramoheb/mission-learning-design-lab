@@ -10,6 +10,7 @@ import {
   PREPARED_BY,
   PRESENTATION_TITLE_LINE
 } from "@/lib/constants";
+import { getGroupIdentity } from "@/lib/groupIdentity";
 
 type PresentationModeProps = {
   data: ActivityData;
@@ -37,6 +38,7 @@ export function PresentationMode({
   onSummary
 }: PresentationModeProps) {
   const [slideIndex, setSlideIndex] = useState(0);
+  const groupIdentity = getGroupIdentity(data.groupName);
 
   const slides = useMemo<Slide[]>(
     () => [
@@ -235,7 +237,7 @@ export function PresentationMode({
   }, [onExit, slides.length]);
 
   return (
-    <main className="min-h-screen bg-navy-900 p-4 text-white [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] [background-size:44px_44px] md:p-6">
+    <main className="min-h-screen bg-navy-900 p-4 text-white [background-image:radial-gradient(circle_at_20%_10%,rgba(75,146,219,.22),transparent_28%),linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] [background-size:auto,44px_44px,44px_44px] md:p-6">
       <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-7xl flex-col overflow-hidden rounded-[2rem] border border-white/15 bg-white text-field-ink shadow-command md:min-h-[calc(100vh-3rem)]">
         <header className="no-print flex flex-col gap-4 border-b border-field-border bg-field-mist/70 p-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -243,10 +245,13 @@ export function PresentationMode({
               {APP_TITLE}
             </p>
             <p className="text-lg font-bold text-navy-900">
-              Use arrow keys to navigate. Three minutes means three minutes.
+              Mission briefing deck. Use arrow keys to navigate.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <span className="inline-flex items-center justify-center rounded-full border border-un-line bg-un-light px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] text-navy-900">
+              {groupIdentity?.label ?? "Group"}
+            </span>
             <Timer seconds={180} label="Presentation time" />
             <button
               type="button"
@@ -268,7 +273,8 @@ export function PresentationMode({
         </header>
 
         <section className="relative flex flex-1 flex-col justify-center overflow-hidden p-7 md:p-12 lg:p-16">
-          <div className="absolute inset-y-0 right-0 hidden w-28 bg-un-light/70 lg:block" />
+          <div className="absolute inset-y-0 right-0 hidden w-28 border-l border-un-line bg-un-light/70 lg:block" />
+          <div className="absolute left-0 top-0 h-full w-2 bg-un-blue" />
           <div className="relative">
             <p className="text-base font-bold uppercase tracking-[0.18em] text-un-blue">
               Slide {slideIndex + 1} of {slides.length}
@@ -287,7 +293,7 @@ export function PresentationMode({
                 <article
                   key={`${item.label ?? "content"}-${index}`}
                   className={cn(
-                    "rounded-2xl border border-field-border bg-field-mist p-6 shadow-sm",
+                    "rounded-2xl border border-field-border bg-field-mist p-5 shadow-sm",
                     slideIndex === 0 && "bg-white"
                   )}
                 >
@@ -324,7 +330,10 @@ export function PresentationMode({
                 Projector-friendly slide view
               </span>
             </div>
-            <p className="text-sm font-semibold text-slate-600">{PREPARED_BY}</p>
+            <p className="text-sm font-semibold text-slate-600">
+              {PREPARED_BY}
+              {data.groupName.trim() ? ` | ${data.groupName}` : ""}
+            </p>
           </div>
           <div className="no-print flex flex-wrap items-center gap-2">
             {slides.map((slide, index) => (

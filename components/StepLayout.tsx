@@ -14,6 +14,9 @@ import type { ReactNode } from "react";
 import type { StepDefinition, StepKey } from "@/types/activity";
 import { ProgressStepper } from "@/components/ProgressStepper";
 import { APP_TITLE, MAIN_TAGLINE, PREPARED_BY } from "@/lib/constants";
+import { getGroupIdentity } from "@/lib/groupIdentity";
+import { getPhaseStyle } from "@/lib/phaseStyles";
+import { cn } from "@/lib/utils";
 
 type StepLayoutProps = {
   step: StepKey;
@@ -23,6 +26,7 @@ type StepLayoutProps = {
   description?: string;
   saveStatus: "loading" | "saving" | "saved";
   progressPercent: number;
+  groupName: string;
   children: ReactNode;
   canGoBack: boolean;
   canGoNext: boolean;
@@ -41,6 +45,7 @@ export function StepLayout({
   description,
   saveStatus,
   progressPercent,
+  groupName,
   children,
   canGoBack,
   canGoNext,
@@ -52,17 +57,28 @@ export function StepLayout({
 }: StepLayoutProps) {
   const saveLabel =
     saveStatus === "saving" ? "Saving..." : "Saved locally on this device";
+  const groupIdentity = getGroupIdentity(groupName);
+  const phase = getPhaseStyle(step);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[linear-gradient(rgba(75,146,219,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(75,146,219,0.08)_1px,transparent_1px)] bg-[size:42px_42px]" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_18%_12%,rgba(75,146,219,0.22),transparent_28%),radial-gradient(circle_at_82%_8%,rgba(8,31,59,0.10),transparent_30%),linear-gradient(rgba(75,146,219,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(75,146,219,0.08)_1px,transparent_1px)] bg-[size:auto,auto,42px_42px,42px_42px]" />
       <header className="no-print border-b border-white/20 bg-navy-900 text-white shadow-[0_18px_60px_rgba(8,31,59,0.18)]">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-4 lg:px-8">
           <div className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr] xl:items-stretch">
-            <div className="rounded-[1.5rem] border border-white/15 bg-white/[0.07] p-4 backdrop-blur">
-              <div className="flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-un-line">
-                <Shield size={18} aria-hidden />
-                {APP_TITLE}
+            <div className="relative overflow-hidden rounded-[1.5rem] border border-white/15 bg-white/[0.07] p-4 backdrop-blur">
+              <div
+                className="absolute inset-x-0 top-0 h-1"
+                style={{ backgroundColor: phase.color }}
+              />
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-un-line">
+                  <Shield size={18} aria-hidden />
+                  {APP_TITLE}
+                </div>
+                <span className="rounded-full border border-white/15 bg-white/[0.09] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-white/80">
+                  {phase.label}
+                </span>
               </div>
               <div className="mt-3 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div>
@@ -91,7 +107,7 @@ export function StepLayout({
                     <p className="text-xs font-bold uppercase text-un-line">
                       Command centre
                     </p>
-                    <p className="text-base font-bold">UN Mission Training Operations Room</p>
+                    <p className="text-base font-bold">UN Mission Operations Board</p>
                   </div>
                 </div>
                 <p className="mt-3 text-sm leading-6 text-white/75">{MAIN_TAGLINE}</p>
@@ -106,6 +122,22 @@ export function StepLayout({
                   <div>
                     <p className="text-sm font-bold text-white">{saveLabel}</p>
                     <p className="mt-1 text-sm leading-6 text-white/70">{PREPARED_BY}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <span
+                        className={cn(
+                          "rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.12em]",
+                          groupIdentity?.tone ??
+                            "border-white/15 bg-white/[0.08] text-white/75"
+                        )}
+                      >
+                        {groupIdentity?.label ?? "Group workspace"}
+                      </span>
+                      {groupName.trim() ? (
+                        <span className="rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-xs font-bold text-white/75">
+                          {groupName}
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -121,8 +153,12 @@ export function StepLayout({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: "easeOut" }}
-          className="rounded-[1.75rem] border border-white/70 bg-white/[0.92] p-5 shadow-command backdrop-blur md:p-8"
+          className="relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/[0.92] p-5 shadow-command backdrop-blur md:p-8"
         >
+          <div
+            className="absolute inset-x-0 top-0 h-1"
+            style={{ backgroundColor: phase.color }}
+          />
           {children}
         </motion.section>
       </main>

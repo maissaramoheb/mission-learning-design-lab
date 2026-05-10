@@ -264,6 +264,7 @@ export default function Home() {
         description={copy.description}
         saveStatus={saveStatus}
         progressPercent={Math.round((index / (steps.length - 1)) * 100)}
+        groupName={data.groupName}
         canGoBack={canGoBack}
         canGoNext={canGoNext}
         nextLabel={
