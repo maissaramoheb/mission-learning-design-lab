@@ -56,7 +56,7 @@ export function TargetsPhase({ data, updateData }: TargetsPhaseProps) {
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#f0ce8e]">
                 Target vs Actual
               </p>
-              <p className="mt-2 max-w-xs text-sm font-semibold leading-6 text-white/80">
+              <p className="mt-2 max-w-xs text-base font-semibold leading-7 text-white/80">
                 Targets must be defined before collecting Level 3 data.
               </p>
             </div>

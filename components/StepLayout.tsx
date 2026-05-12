@@ -314,9 +314,9 @@ export function StepLayout({
             onClick={onBack}
             disabled={!canGoBack}
             className={cn(
-              "inline-flex items-center justify-center gap-2 rounded-xl border border-field-border bg-white px-5 py-3 font-semibold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
-              isEvaluation &&
-                "border-[#5d7896]/55 bg-[#081725] text-white hover:border-[#8ec2f4] hover:bg-[#10263d]"
+            "inline-flex items-center justify-center gap-2 rounded-xl border border-field-border bg-white px-5 py-3 font-semibold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
+            isEvaluation &&
+                "border-[#5d7896]/55 bg-[#081725] text-white hover:border-[#8ec2f4] hover:bg-[#10263d] disabled:text-white/[0.72] disabled:opacity-60"
             )}
           >
             <ArrowLeft size={18} aria-hidden />
@@ -327,9 +327,9 @@ export function StepLayout({
             onClick={onNext}
             disabled={!canGoNext}
             className={cn(
-              "inline-flex items-center justify-center gap-2 rounded-xl bg-navy-900 px-5 py-3 font-semibold text-white shadow-lg shadow-navy-900/20 transition hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
-              isEvaluation &&
-                "bg-[#123352] shadow-[0_16px_36px_rgba(2,10,22,0.32)] hover:bg-[#19446b]"
+            "inline-flex items-center justify-center gap-2 rounded-xl bg-navy-900 px-5 py-3 font-semibold text-white shadow-lg shadow-navy-900/20 transition hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
+            isEvaluation &&
+                "bg-[#123352] shadow-[0_16px_36px_rgba(2,10,22,0.32)] hover:bg-[#19446b] disabled:bg-[#10263d] disabled:text-white/[0.72] disabled:opacity-60"
             )}
           >
             {nextLabel}

@@ -111,7 +111,7 @@ export function EvaluationDesignBuilder({
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#f0ce8e]">
                 Final Evaluation Package
               </p>
-              <p className="mt-2 max-w-xs text-sm font-semibold leading-6 text-white/80">
+              <p className="mt-2 max-w-xs text-base font-semibold leading-7 text-white/80">
                 Consolidate objective, questions, evidence, targets, and action.
               </p>
             </div>
@@ -298,7 +298,7 @@ export function EvaluationDesignBuilder({
             type="button"
             onClick={onGeneratePresentation}
             disabled={!ready}
-            className="mt-5 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-[#123352] px-6 py-4 text-lg font-bold text-white shadow-[0_18px_44px_rgba(2,10,22,0.34)] transition hover:-translate-y-0.5 hover:bg-[#19446b] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0"
+            className="mt-5 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-[#123352] px-6 py-4 text-lg font-bold text-white shadow-[0_18px_44px_rgba(2,10,22,0.34)] transition hover:-translate-y-0.5 hover:bg-[#19446b] disabled:cursor-not-allowed disabled:bg-[#10263d] disabled:text-white/[0.72] disabled:opacity-60 disabled:hover:translate-y-0"
           >
             <Presentation size={20} aria-hidden />
             Brief Evaluation Package

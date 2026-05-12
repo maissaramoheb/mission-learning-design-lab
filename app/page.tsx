@@ -63,7 +63,7 @@ const stepSets: Record<AppMode, StepDefinition[]> = {
     { key: "targets", label: "Targets", shortLabel: "Targets" },
     { key: "builder", label: "Package", shortLabel: "Package" },
     { key: "presentation", label: "Brief", shortLabel: "Brief" },
-    { key: "export", label: "Summary", shortLabel: "Summary" }
+    { key: "export", label: "Export", shortLabel: "Export" }
   ]
 };
 
@@ -381,6 +381,8 @@ export default function Home() {
             ? data.mode === "evaluation"
               ? "Start Evaluation Mission"
               : "Start Learning Mission"
+            : step === "targets" && data.mode === "evaluation"
+              ? "Build Evaluation Package"
             : step === "builder"
               ? data.mode === "evaluation"
                 ? "Brief Evaluation Package"

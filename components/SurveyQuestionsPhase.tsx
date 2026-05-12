@@ -48,7 +48,7 @@ export function SurveyQuestionsPhase({
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8ec2f4]">
                 Transfer Check
               </p>
-              <p className="mt-2 max-w-xs text-sm font-semibold leading-6 text-white/[0.78]">
+              <p className="mt-2 max-w-xs text-base font-semibold leading-7 text-white/[0.82]">
                 Ask whether learning was applied, what actions were taken, and
                 what prevented transfer.
               </p>

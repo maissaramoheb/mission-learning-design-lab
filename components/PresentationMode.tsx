@@ -492,7 +492,7 @@ export function PresentationMode({
               )}
             >
               <FileDown size={18} aria-hidden />
-              Summary
+              {isEvaluation ? "Export Evaluation Summary" : "Summary"}
             </button>
             <button
               type="button"

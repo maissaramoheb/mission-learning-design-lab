@@ -43,7 +43,7 @@ export function ApplicationObjectivePhase({
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8ec2f4]">
                 Field Behaviour
               </p>
-              <p className="mt-2 max-w-xs text-sm font-semibold leading-6 text-white/[0.78]">
+              <p className="mt-2 max-w-xs text-base font-semibold leading-7 text-white/[0.82]">
                 Describe what participants should actually do on the job after
                 training.
               </p>

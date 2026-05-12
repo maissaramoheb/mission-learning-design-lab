@@ -24,7 +24,12 @@ export function FieldShell({
         {label}
       </span>
       {helper ? (
-        <span className={cn("mt-1 block text-sm leading-6 text-slate-600", tactical && "text-white/[0.72]")}>
+        <span
+          className={cn(
+            "mt-1 block text-sm leading-6 text-slate-600",
+            tactical && "text-base leading-7 text-white/[0.78]"
+          )}
+        >
           {helper}
         </span>
       ) : null}

@@ -25,7 +25,7 @@ export function ProgressStepper({
       aria-label="Activity progress"
       className="no-print rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-2 backdrop-blur"
     >
-      <ol className="grid gap-2 md:grid-cols-3 xl:grid-cols-10">
+      <ol className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-10">
         {steps.map((step, index) => {
           const isActive = step.key === currentStep;
           const isComplete = index < currentIndex;
@@ -39,7 +39,7 @@ export function ProgressStepper({
                 title={step.label}
                 style={isActive ? { borderColor: phase.color } : undefined}
                 className={cn(
-                  "group flex h-full w-full items-center gap-2 rounded-2xl border px-3 py-2 text-left text-sm transition",
+                  "group flex h-full min-h-[58px] w-full items-center gap-2 rounded-2xl border px-3 py-2 text-left text-sm transition",
                   isActive &&
                     "border-un-line bg-white text-navy-900 shadow-lg shadow-navy-900/15 ring-2 ring-un-line/50",
                   !isActive &&
@@ -68,7 +68,7 @@ export function ProgressStepper({
                   {isComplete ? <Check aria-hidden size={14} /> : index + 1}
                 </span>
                 <span className="min-w-0">
-                  <span className="block truncate font-bold">{step.label}</span>
+                  <span className="block whitespace-nowrap font-bold">{step.label}</span>
                 </span>
               </button>
             </li>
