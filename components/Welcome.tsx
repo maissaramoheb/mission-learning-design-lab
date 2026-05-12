@@ -2,51 +2,82 @@
 
 import {
   ArrowRight,
+  BarChart3,
   BadgeCheck,
   Eye,
   Layers3,
   QrCode,
-  ShieldCheck
+  ShieldCheck,
+  Target
 } from "lucide-react";
 import { motion } from "framer-motion";
+import type { AppMode } from "@/types/activity";
 import { Badge } from "@/components/FormElements";
 import { QRCodeAccessCard } from "@/components/QRCodeAccessCard";
-import {
-  APP_TITLE,
-  MAIN_TAGLINE,
-  PREPARED_BY,
-  PRESENTATION_TITLE_LINE
-} from "@/lib/constants";
+import { LIVE_WORKSPACE_URL, PREPARED_BY, modeContent } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 type WelcomeProps = {
+  mode: AppMode;
+  onModeChange: (mode: AppMode) => void;
   onStart: () => void;
 };
 
-const theories = [
-  {
-    title: "Behaviourist Learning",
-    icon: ShieldCheck,
-    badge: "Rules",
-    body: "Rules. Right/wrong. Correction. Reinforcement."
-  },
-  {
-    title: "Social Cognitive Learning",
-    icon: Eye,
-    badge: "Skills",
-    body: "Demonstration. Modelling. Practice. Feedback."
-  },
-  {
-    title: "Constructivist Learning",
-    icon: Layers3,
-    badge: "Judgment",
-    body: "Scenario analysis. Experience. Group-built solution."
-  }
-];
+const modeCards: Record<
+  AppMode,
+  Array<{ title: string; body: string; badge: string; icon: typeof ShieldCheck }>
+> = {
+  learning: [
+    {
+      title: "Behaviourist Learning",
+      icon: ShieldCheck,
+      badge: "Rules",
+      body: "Rules. Right/wrong. Correction. Reinforcement."
+    },
+    {
+      title: "Social Cognitive Learning",
+      icon: Eye,
+      badge: "Skills",
+      body: "Demonstration. Modelling. Practice. Feedback."
+    },
+    {
+      title: "Constructivist Learning",
+      icon: Layers3,
+      badge: "Judgment",
+      body: "Scenario analysis. Experience. Group-built solution."
+    }
+  ],
+  evaluation: [
+    {
+      title: "Application Objective",
+      icon: Target,
+      badge: "Transfer",
+      body: "Convert learning objectives into observable workplace behaviours."
+    },
+    {
+      title: "Survey Questions",
+      icon: BarChart3,
+      badge: "Questions",
+      body: "Ask what was applied, how often, and with what result."
+    },
+    {
+      title: "Evidence Methods",
+      icon: Layers3,
+      badge: "Evidence",
+      body: "Use surveys, supervisor feedback, and work-sample evidence."
+    },
+    {
+      title: "Barriers & Enablers",
+      icon: BadgeCheck,
+      badge: "Transfer",
+      body: "Identify why workplace application succeeded or stalled."
+    }
+  ]
+};
 
-const liveWorkspaceUrl =
-  "https://mission-learning-design-nm7eoczna-delta4ce20-5830s-projects.vercel.app/";
+export function Welcome({ mode, onModeChange, onStart }: WelcomeProps) {
+  const content = modeContent[mode];
 
-export function Welcome({ onStart }: WelcomeProps) {
   return (
     <div className="space-y-6">
       <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
@@ -55,44 +86,70 @@ export function Welcome({ onStart }: WelcomeProps) {
           <div className="relative">
             <Badge>UN Peacekeeping Training-of-Trainers</Badge>
             <h2 className="mt-5 max-w-4xl text-5xl font-bold leading-tight md:text-6xl">
-              {APP_TITLE}
+              {content.appTitle}
             </h2>
             <p className="mt-4 max-w-3xl text-2xl leading-10 text-un-line">
-              One mission scenario. Three learning theories. One professional
-              training response.
+              {content.subtitle}
             </p>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-white/80">
-              This is not a slide deck. It is a group design workspace. Work
-              together, assign roles, build your training response, and present
-              from the same tool.
+              Select the lab for this session. Both modes keep the same roster,
+              group workflow, local save behavior, presentation mode, and
+              printable summary.
             </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {(["learning", "evaluation"] as AppMode[]).map((labMode) => {
+                const lab = modeContent[labMode];
+                return (
+                  <button
+                    key={labMode}
+                    type="button"
+                    onClick={() => onModeChange(labMode)}
+                    className={cn(
+                      "rounded-2xl border px-4 py-4 text-left transition hover:-translate-y-0.5",
+                      mode === labMode
+                        ? "border-un-line bg-white text-navy-900 shadow-xl"
+                        : "border-white/15 bg-white/[0.08] text-white hover:border-white/35"
+                    )}
+                  >
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] opacity-80">
+                      {labMode === "learning"
+                        ? "1. Learning Theories Lab"
+                        : "2. Evaluation Design Operations Lab"}
+                    </p>
+                    <p className="mt-2 text-lg font-bold">{lab.appTitle}</p>
+                  </button>
+                );
+              })}
+            </div>
             <button
               type="button"
               onClick={onStart}
-              className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-white px-6 py-4 text-lg font-bold text-navy-900 shadow-xl shadow-black/20 transition hover:-translate-y-0.5 hover:bg-un-light"
+              className="mt-6 inline-flex items-center gap-3 rounded-2xl bg-white px-6 py-4 text-lg font-bold text-navy-900 shadow-xl shadow-black/20 transition hover:-translate-y-0.5 hover:bg-un-light"
             >
-              Start Group Activity
+              {mode === "evaluation"
+                ? "Start Evaluation Mission"
+                : "Start Learning Mission"}
               <ArrowRight size={20} aria-hidden />
             </button>
             <div className="mt-6 grid gap-3 text-sm font-semibold text-white/75 sm:grid-cols-2">
               <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-4">
-                <p className="text-un-line">Mission principle</p>
-                <p className="mt-1 text-white">{MAIN_TAGLINE}</p>
+                <p className="text-un-line">Core message</p>
+                <p className="mt-1 text-white">{content.tagline}</p>
               </div>
               <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-4">
-                <p className="text-un-line">Presentation outcome</p>
-                <p className="mt-1 text-white">{PRESENTATION_TITLE_LINE}</p>
+                <p className="text-un-line">Presentation output</p>
+                <p className="mt-1 text-white">{content.presentationTitleLine}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="grid gap-3">
-          {theories.map((theory, index) => {
-            const Icon = theory.icon;
+          {modeCards[mode].map((card, index) => {
+            const Icon = card.icon;
             return (
               <motion.article
-                key={theory.title}
+                key={card.title}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05, duration: 0.24 }}
@@ -105,12 +162,12 @@ export function Welcome({ onStart }: WelcomeProps) {
                   <div>
                     <div className="flex flex-wrap items-center gap-3">
                       <h3 className="text-xl font-bold text-navy-900">
-                        {theory.title}
+                        {card.title}
                       </h3>
-                      <Badge>{theory.badge}</Badge>
+                      <Badge>{card.badge}</Badge>
                     </div>
                     <p className="mt-2 text-lg leading-7 text-slate-700">
-                      {theory.body}
+                      {card.body}
                     </p>
                   </div>
                 </div>
@@ -130,8 +187,8 @@ export function Welcome({ onStart }: WelcomeProps) {
                   Open one workspace per group
                 </h3>
                 <p className="mt-2 text-lg leading-8 text-slate-700">
-                  Open this app on one laptop per group. Use the shared link or
-                  QR code.
+                  The facilitator chooses the lab, then each group uses one
+                  workspace on one laptop.
                 </p>
               </div>
             </div>
@@ -142,11 +199,11 @@ export function Welcome({ onStart }: WelcomeProps) {
               <BadgeCheck className="mt-1 text-un-blue" size={24} aria-hidden />
               <div>
                 <h3 className="text-xl font-bold text-navy-900">
-                  Classroom-ready group workflow
+                  Shared workflow, mode-specific content
                 </h3>
                 <p className="mt-2 text-lg leading-8 text-slate-700">
-                  Select members, assign roles, build the training design, and
-                  brief from Presentation Mode.
+                  Select members, assign roles, complete the mode-specific
+                  phases, and brief from Presentation Mode.
                 </p>
               </div>
             </div>
@@ -154,7 +211,7 @@ export function Welcome({ onStart }: WelcomeProps) {
         </div>
 
         <QRCodeAccessCard
-          url={liveWorkspaceUrl}
+          url={LIVE_WORKSPACE_URL}
           title="Scan to Open Workspace"
           subtitle="Open one workspace per group."
         />

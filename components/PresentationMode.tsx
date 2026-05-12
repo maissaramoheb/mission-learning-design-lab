@@ -5,11 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ActivityData } from "@/types/activity";
 import { Timer } from "@/components/Timer";
 import { cn } from "@/lib/utils";
-import {
-  APP_TITLE,
-  PREPARED_BY,
-  PRESENTATION_TITLE_LINE
-} from "@/lib/constants";
+import { PREPARED_BY, modeContent } from "@/lib/constants";
 import { getGroupIdentity } from "@/lib/groupIdentity";
 
 type PresentationModeProps = {
@@ -32,6 +28,379 @@ function listOrFallback(values: string[], fallback: string) {
   return values.length > 0 ? values : [fallback];
 }
 
+function splitLines(value: string, fallback: string) {
+  const entries = value
+    .split("\n")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+  return entries.length > 0 ? entries : [fallback];
+}
+
+function buildLearningSlides(data: ActivityData): Slide[] {
+  const content = modeContent.learning;
+
+  return [
+    {
+      title: content.appTitle,
+      kicker: content.presentationTitleLine,
+      content: [
+        {
+          label: "Group",
+          value: valueOrFallback(data.groupName, "Group Presentation")
+        },
+        {
+          label: "Training title",
+          value: valueOrFallback(
+            data.design.title,
+            "First Response Near an IDP Settlement"
+          )
+        },
+        {
+          label: "Target audience",
+          value: valueOrFallback(
+            data.design.targetAudience,
+            "Newly deployed UN Police officers"
+          )
+        },
+        {
+          label: "Credit",
+          value: PREPARED_BY
+        }
+      ]
+    },
+    {
+      title: "Mission Scenario Summary",
+      kicker: "Patrol Near an IDP Settlement",
+      content: [
+        {
+          value:
+            "UN Police patrols face safety indicators, weak reporting, community mistrust, and tension near an IDP settlement."
+        },
+        {
+          label: "Main training gap",
+          value: valueOrFallback(
+            data.trainingGap,
+            "A consistent training response is needed for safety, respectful engagement, reporting, and trust-building."
+          )
+        }
+      ]
+    },
+    {
+      title: "SMART Learning Objective",
+      kicker: "Objective-led design",
+      content: [
+        {
+          value: `By the end of this 15-minute mini-training, participants will be able to ${valueOrFallback(
+            data.design.smartObjective,
+            "identify safety indicators, demonstrate respectful witness questioning, and propose a community-sensitive response."
+          )}`
+        }
+      ]
+    },
+    {
+      title: "Behaviourist Element",
+      kicker: "Rules, correction, reinforcement",
+      content: [
+        {
+          label: "Rule / right-wrong item",
+          value: valueOrFallback(
+            data.design.behaviouristElement || data.behaviourist.ruleItem,
+            "Officers must separate observed facts from assumptions in patrol reporting."
+          )
+        },
+        {
+          label: "Reinforcement method",
+          value: valueOrFallback(
+            data.behaviourist.reinforcement,
+            "Use immediate correction during a quick scenario drill."
+          )
+        }
+      ]
+    },
+    {
+      title: "Social Cognitive Element",
+      kicker: "Model, practice, feedback",
+      content: [
+        {
+          label: "Demonstration / role-play",
+          value: valueOrFallback(
+            data.design.socialCognitiveElement || data.social.demonstratedBehaviour,
+            "Demonstrate respectful questioning of a civilian witness."
+          )
+        },
+        {
+          label: "Observer checklist",
+          value: listOrFallback(
+            data.social.observerChecklist,
+            "Open questions, respectful tone, one question at a time."
+          )
+        },
+        {
+          label: "Feedback approach",
+          value: valueOrFallback(
+            data.social.feedbackApproach,
+            "Praise effective questioning, correct leading questions, and require an accurate summary."
+          )
+        }
+      ]
+    },
+    {
+      title: "Constructivist Element",
+      kicker: "Scenario, experience, group-built solution",
+      content: [
+        {
+          label: "Scenario question",
+          value: valueOrFallback(
+            data.constructivist.scenarioQuestion,
+            "How should the patrol respond in the first 30 minutes without increasing risk or damaging community trust?"
+          )
+        },
+        {
+          label: "Group task",
+          value: valueOrFallback(
+            data.constructivist.groupTask,
+            "Propose a patrol response plan covering safety, engagement, reporting, and coordination."
+          )
+        },
+        {
+          label: "Expected output",
+          value: listOrFallback(
+            data.constructivist.outputs,
+            "Patrol response plan"
+          )
+        }
+      ]
+    },
+    {
+      title: "Assessment Method",
+      kicker: "Evidence of learning",
+      content: [
+        {
+          label: "Method",
+          value: valueOrFallback(data.design.assessmentMethod, "combined method")
+        },
+        {
+          label: "How learning will be checked",
+          value: valueOrFallback(
+            data.design.assessmentDescription,
+            "Observe role-play performance and review each group’s response logic against the objective."
+          )
+        }
+      ]
+    },
+    {
+      title: "Risk and Control Measure",
+      kicker: "Training room discipline",
+      content: [
+        {
+          label: "Main risk",
+          value: valueOrFallback(data.design.deliveryRisk, "time overrun")
+        },
+        {
+          label: "Control measure",
+          value: valueOrFallback(
+            data.design.controlMeasure,
+            "Assign roles, use strict time, and keep the output focused on training design."
+          )
+        }
+      ]
+    },
+    {
+      title: "Final Key Message",
+      kicker: "Training design principle",
+      content: [
+        {
+          value: valueOrFallback(
+            data.design.finalKeyMessage,
+            "Facts need clarity. Skills need modelling. Complex mission problems need judgment."
+          )
+        }
+      ]
+    }
+  ];
+}
+
+function buildEvaluationSlides(data: ActivityData): Slide[] {
+  const content = modeContent.evaluation;
+
+  return [
+    {
+      title: content.appTitle,
+      kicker: content.presentationTitleLine,
+      content: [
+        {
+          label: "Group",
+          value: valueOrFallback(data.groupName, "Evaluation Design Team")
+        },
+        {
+          label: "Training topic",
+          value: valueOrFallback(
+            data.evaluationDesign.trainingTopic,
+            "Protection of Civilians by UN Police"
+          )
+        },
+        {
+          label: "Credit",
+          value: PREPARED_BY
+        }
+      ]
+    },
+    {
+      title: "Training Topic and Learning Objective",
+      kicker: "Evaluation starting point",
+      content: [
+        {
+          label: "Training topic",
+          value: valueOrFallback(
+            data.evaluationDesign.trainingTopic,
+            "Protection of Civilians by UN Police"
+          )
+        },
+        {
+          label: "Original learning objective",
+          value: valueOrFallback(
+            data.evaluationDesign.originalLearningObjective,
+            "Participants identify protection threats and explain appropriate UNPOL response options."
+          )
+        }
+      ]
+    },
+    {
+      title: "Level 3 Application Objective",
+      kicker: "Observable workplace behaviour",
+      content: [
+        {
+          value: valueOrFallback(
+            data.evaluationDesign.applicationObjective,
+            "Within three months of deployment, participants apply appropriate UNPOL response options, coordinate with relevant actors, and report protection concerns in accordance with mission procedures."
+          )
+        }
+      ]
+    },
+    {
+      title: "Main Survey Structure",
+      kicker: "Application evidence questions",
+      content: [
+        {
+          label: "Core survey items",
+          value: [
+            valueOrFallback(
+              data.evaluationDesign.mainSurveyQuestion,
+              "Were you able to apply the learning in your mission duties?"
+            ),
+            valueOrFallback(
+              data.evaluationDesign.confidenceQuestion,
+              "How confident were you in applying these skills?"
+            ),
+            valueOrFallback(
+              data.evaluationDesign.frequencyQuestion,
+              "How often have you applied these skills since training?"
+            ),
+            valueOrFallback(
+              data.evaluationDesign.barriersQuestion,
+              "What barriers prevented application?"
+            ),
+            valueOrFallback(
+              data.evaluationDesign.openEvidenceQuestion,
+              "Describe one example of application or attempted application."
+            )
+          ]
+        },
+        {
+          label: "Action checklist",
+          value: splitLines(
+            data.evaluationDesign.actionChecklist,
+            "Action checklist to be confirmed by the group."
+          )
+        }
+      ]
+    },
+    {
+      title: "Additional Evidence Methods",
+      kicker: "Beyond self-report",
+      content: [
+        {
+          value: splitLines(
+            data.evaluationDesign.additionalEvidenceMethods,
+            "Supervisor feedback, work sample review, or action-plan follow-up."
+          )
+        }
+      ]
+    },
+    {
+      title: "Targets and Success Criteria",
+      kicker: "How success will be judged",
+      content: [
+        {
+          label: "Target score",
+          value: valueOrFallback(
+            data.evaluationDesign.targetScore,
+            "At least 80% report application within three months."
+          )
+        },
+        {
+          label: "Confidence target",
+          value: valueOrFallback(
+            data.evaluationDesign.confidenceTarget,
+            "Average confidence score of 4/5 or above."
+          )
+        },
+        {
+          label: "Transfer target",
+          value: valueOrFallback(
+            data.evaluationDesign.transferTarget,
+            "At least 60% report sharing or transferring knowledge to colleagues."
+          )
+        }
+      ]
+    },
+    {
+      title: "Expected Barriers and Enablers",
+      kicker: "Transfer conditions",
+      content: [
+        {
+          label: "Enablers",
+          value: splitLines(
+            data.evaluationDesign.enablers,
+            "Supervisor support, opportunity to apply, clear SOPs."
+          )
+        },
+        {
+          label: "Barriers",
+          value: splitLines(
+            data.evaluationDesign.barriers,
+            "Lack of opportunity, unclear procedures, limited time or resources."
+          )
+        }
+      ]
+    },
+    {
+      title: "Follow-up if Targets Are Not Met",
+      kicker: "Corrective action",
+      content: [
+        {
+          value: valueOrFallback(
+            data.evaluationDesign.followUpAction,
+            "Use refresher training, coaching, supervisor briefing, or a revised job aid."
+          )
+        }
+      ]
+    },
+    {
+      title: "Final Message",
+      kicker: "Evaluation principle",
+      content: [
+        {
+          value: valueOrFallback(
+            data.evaluationDesign.finalMessage,
+            "Level 3 evaluation proves whether learning became workplace behaviour."
+          )
+        }
+      ]
+    }
+  ];
+}
+
 export function PresentationMode({
   data,
   onExit,
@@ -39,178 +408,10 @@ export function PresentationMode({
 }: PresentationModeProps) {
   const [slideIndex, setSlideIndex] = useState(0);
   const groupIdentity = getGroupIdentity(data.groupName);
+  const content = modeContent[data.mode];
 
   const slides = useMemo<Slide[]>(
-    () => [
-      {
-        title: APP_TITLE,
-        kicker: PRESENTATION_TITLE_LINE,
-        content: [
-          {
-            label: "Group",
-            value: valueOrFallback(data.groupName, "Group Presentation")
-          },
-          {
-            label: "Training title",
-            value: valueOrFallback(data.design.title, "First Response Near an IDP Settlement")
-          },
-          {
-            label: "Target audience",
-            value: valueOrFallback(
-              data.design.targetAudience,
-              "Newly deployed UN Police officers"
-            )
-          },
-          {
-            label: "Credit",
-            value: PREPARED_BY
-          }
-        ]
-      },
-      {
-        title: "Mission Scenario Summary",
-        kicker: "Patrol Near an IDP Settlement",
-        content: [
-          {
-            value:
-              "UN Police patrols face safety indicators, weak reporting, community mistrust, and tension near an IDP settlement."
-          },
-          {
-            label: "Main training gap",
-            value: valueOrFallback(
-              data.trainingGap,
-              "A consistent training response is needed for safety, respectful engagement, reporting, and trust-building."
-            )
-          }
-        ]
-      },
-      {
-        title: "SMART Learning Objective",
-        kicker: "Objective-led design",
-        content: [
-          {
-            value: `By the end of this 15-minute mini-training, participants will be able to ${valueOrFallback(
-              data.design.smartObjective,
-              "identify safety indicators, demonstrate respectful witness questioning, and propose a community-sensitive response."
-            )}`
-          }
-        ]
-      },
-      {
-        title: "Behaviourist Element",
-        kicker: "Rules, correction, reinforcement",
-        content: [
-          {
-            label: "Rule / right-wrong item",
-            value: valueOrFallback(
-              data.design.behaviouristElement || data.behaviourist.ruleItem,
-              "Officers must separate observed facts from assumptions in patrol reporting."
-            )
-          },
-          {
-            label: "Reinforcement method",
-            value: valueOrFallback(
-              data.behaviourist.reinforcement,
-              "Use immediate correction during a quick scenario drill."
-            )
-          }
-        ]
-      },
-      {
-        title: "Social Cognitive Element",
-        kicker: "Model, practice, feedback",
-        content: [
-          {
-            label: "Demonstration / role-play",
-            value: valueOrFallback(
-              data.design.socialCognitiveElement || data.social.demonstratedBehaviour,
-              "Demonstrate respectful questioning of a civilian witness."
-            )
-          },
-          {
-            label: "Observer checklist",
-            value: listOrFallback(data.social.observerChecklist, "Open questions, respectful tone, one question at a time.")
-          },
-          {
-            label: "Feedback approach",
-            value: valueOrFallback(
-              data.social.feedbackApproach,
-              "Praise effective questioning, correct leading questions, and require an accurate summary."
-            )
-          }
-        ]
-      },
-      {
-        title: "Constructivist Element",
-        kicker: "Scenario, experience, group-built solution",
-        content: [
-          {
-            label: "Scenario question",
-            value: valueOrFallback(
-              data.constructivist.scenarioQuestion,
-              "How should the patrol respond in the first 30 minutes without increasing risk or damaging community trust?"
-            )
-          },
-          {
-            label: "Group task",
-            value: valueOrFallback(
-              data.constructivist.groupTask,
-              "Propose a patrol response plan covering safety, engagement, reporting, and coordination."
-            )
-          },
-          {
-            label: "Expected output",
-            value: listOrFallback(data.constructivist.outputs, "Patrol response plan")
-          }
-        ]
-      },
-      {
-        title: "Assessment Method",
-        kicker: "Evidence of learning",
-        content: [
-          {
-            label: "Method",
-            value: valueOrFallback(data.design.assessmentMethod, "combined method")
-          },
-          {
-            label: "How learning will be checked",
-            value: valueOrFallback(
-              data.design.assessmentDescription,
-              "Observe role-play performance and review each group’s response logic against the objective."
-            )
-          }
-        ]
-      },
-      {
-        title: "Risk and Control Measure",
-        kicker: "Training room discipline",
-        content: [
-          {
-            label: "Main risk",
-            value: valueOrFallback(data.design.deliveryRisk, "time overrun")
-          },
-          {
-            label: "Control measure",
-            value: valueOrFallback(
-              data.design.controlMeasure,
-              "Assign roles, use strict time, and keep the output focused on training design."
-            )
-          }
-        ]
-      },
-      {
-        title: "Final Key Message",
-        kicker: "Training design principle",
-        content: [
-          {
-            value: valueOrFallback(
-              data.design.finalKeyMessage,
-              "Facts need clarity. Skills need modelling. Complex mission problems need judgment."
-            )
-          }
-        ]
-      }
-    ],
+    () => (data.mode === "evaluation" ? buildEvaluationSlides(data) : buildLearningSlides(data)),
     [data]
   );
 
@@ -242,10 +443,12 @@ export function PresentationMode({
         <header className="no-print flex flex-col gap-4 border-b border-field-border bg-field-mist/70 p-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-sm font-bold uppercase text-un-blue">
-              {APP_TITLE}
+              {content.appTitle}
             </p>
             <p className="text-lg font-bold text-navy-900">
-              Mission briefing deck. Use arrow keys to navigate.
+              {data.mode === "evaluation"
+                ? "Evaluation briefing deck. Use arrow keys to navigate."
+                : "Mission briefing deck. Use arrow keys to navigate."}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

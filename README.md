@@ -1,12 +1,19 @@
 # Mission Learning Design Lab
 
-A polished Next.js group-work app for a UN Peacekeeping Training-of-Trainers course. Trainee groups use one laptop per group to apply behaviourist, social cognitive, and constructivist learning theory to one realistic mission-training scenario, then present their final mini-training design from the same app.
+A polished Next.js group-work app for a UN Peacekeeping Training-of-Trainers course. The welcome screen now lets the facilitator choose between two trainee-facing labs:
+
+- Learning Theories Lab
+- Evaluation Design Operations Lab
 
 Prepared by Lt. Col. / Maissara Selim.
 
 ## Description
 
-Mission Learning Design Lab guides senior officers and trainers through:
+The shared app shell supports one laptop per group, roster-based setup, local autosave, presentation mode, and print/export output. Each mode provides a complete guided workflow.
+
+### Learning Theories Lab
+
+Guides senior officers and trainers through:
 
 - Group setup with a built-in participant roster
 - Mission scenario analysis
@@ -16,6 +23,19 @@ Mission Learning Design Lab guides senior officers and trainers through:
 - Final 15-minute mini-training builder
 - Full-screen presentation mode
 - Printable/exportable group summary
+
+### Evaluation Design Operations Lab
+
+Guides the same groups through:
+
+- Evaluation mission scenario framing
+- Conversion of learning objectives into Level 3 application objectives
+- Design of Level 3 survey questions
+- Selection of evidence methods beyond survey data
+- Targets, barriers, and enablers
+- Final evaluation package builder
+- Full-screen presentation mode
+- Printable/exportable Level 3 summary
 
 The app uses localStorage only. There is no backend, login, database, or required environment variable.
 
@@ -61,8 +81,9 @@ vercel --prod
 
 - Share the Vercel link or QR code.
 - Use one laptop per group.
+- Choose either Learning Theories Lab or Evaluation Design Operations Lab on the welcome screen.
 - Each group selects its members from the roster.
-- Each group assigns required roles: Lead Facilitator and Presenter.
+- Each group assigns the required lead and presenter roles for the selected mode.
 - Each group completes all activity phases.
 - Each group generates Presentation Mode and presents for 3 minutes.
 - Each group may print, copy, or download its summary.

@@ -13,7 +13,7 @@ import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import type { StepDefinition, StepKey } from "@/types/activity";
 import { ProgressStepper } from "@/components/ProgressStepper";
-import { APP_TITLE, MAIN_TAGLINE, PREPARED_BY } from "@/lib/constants";
+import { PREPARED_BY } from "@/lib/constants";
 import { getGroupIdentity } from "@/lib/groupIdentity";
 import { getPhaseStyle } from "@/lib/phaseStyles";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,9 @@ type StepLayoutProps = {
   title: string;
   eyebrow?: string;
   description?: string;
+  appTitle: string;
+  mainTagline: string;
+  commandLabel: string;
   saveStatus: "loading" | "saving" | "saved";
   progressPercent: number;
   groupName: string;
@@ -43,6 +46,9 @@ export function StepLayout({
   title,
   eyebrow,
   description,
+  appTitle,
+  mainTagline,
+  commandLabel,
   saveStatus,
   progressPercent,
   groupName,
@@ -74,7 +80,7 @@ export function StepLayout({
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-un-line">
                   <Shield size={18} aria-hidden />
-                  {APP_TITLE}
+                  {appTitle}
                 </div>
                 <span className="rounded-full border border-white/15 bg-white/[0.09] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-white/80">
                   {phase.label}
@@ -107,10 +113,10 @@ export function StepLayout({
                     <p className="text-xs font-bold uppercase text-un-line">
                       Command centre
                     </p>
-                    <p className="text-base font-bold">UN Mission Operations Board</p>
+                    <p className="text-base font-bold">{commandLabel}</p>
                   </div>
                 </div>
-                <p className="mt-3 text-sm leading-6 text-white/75">{MAIN_TAGLINE}</p>
+                <p className="mt-3 text-sm leading-6 text-white/75">{mainTagline}</p>
               </div>
               <div className="rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-4 backdrop-blur">
                 <div className="flex items-start gap-3">

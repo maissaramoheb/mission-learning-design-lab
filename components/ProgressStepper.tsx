@@ -23,7 +23,7 @@ export function ProgressStepper({
       aria-label="Activity progress"
       className="no-print rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-2 backdrop-blur"
     >
-      <ol className="grid gap-2 md:grid-cols-3 xl:grid-cols-9">
+      <ol className="grid gap-2 md:grid-cols-3 xl:grid-cols-10">
         {steps.map((step, index) => {
           const isActive = step.key === currentStep;
           const isComplete = index < currentIndex;

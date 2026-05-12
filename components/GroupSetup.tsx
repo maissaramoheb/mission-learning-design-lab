@@ -42,40 +42,73 @@ const suggestedGroups = [
   ["Lt. Col Mohamed Dessouky", "Lt. Col Tarek Nouh", "Lt. Col Mohamed Sarhan"]
 ];
 
-const roles: Array<{
+type RoleDescriptor = {
   key: keyof Roles;
   label: string;
   helper: string;
   required?: boolean;
-}> = [
-  {
-    key: "leadFacilitator",
-    label: "Lead Facilitator",
-    helper: "Keeps the group focused and manages discussion.",
-    required: true
-  },
-  {
-    key: "rolePlayer",
-    label: "Role-player",
-    helper: "Performs the short demonstration or scenario role."
-  },
-  {
-    key: "observerEvaluator",
-    label: "Observer / Evaluator",
-    helper: "Checks whether the activity uses the learning theory correctly."
-  },
-  {
-    key: "rapporteur",
-    label: "Rapporteur",
-    helper: "Captures group decisions in the app."
-  },
-  {
-    key: "presenter",
-    label: "Presenter",
-    helper: "Delivers the final group presentation.",
-    required: true
-  }
-];
+};
+
+const rolesByMode: Record<ActivityData["mode"], RoleDescriptor[]> = {
+  learning: [
+    {
+      key: "leadFacilitator",
+      label: "Lead Facilitator",
+      helper: "Keeps the group focused and manages discussion.",
+      required: true
+    },
+    {
+      key: "rolePlayer",
+      label: "Role-player",
+      helper: "Performs the short demonstration or scenario role."
+    },
+    {
+      key: "observerEvaluator",
+      label: "Observer / Evaluator",
+      helper: "Checks whether the activity uses the learning theory correctly."
+    },
+    {
+      key: "rapporteur",
+      label: "Rapporteur",
+      helper: "Captures group decisions in the app."
+    },
+    {
+      key: "presenter",
+      label: "Presenter",
+      helper: "Delivers the final group presentation.",
+      required: true
+    }
+  ],
+  evaluation: [
+    {
+      key: "leadFacilitator",
+      label: "Evaluation Lead",
+      helper: "Keeps the group focused on credible Level 3 design.",
+      required: true
+    },
+    {
+      key: "rolePlayer",
+      label: "Application Objective Writer",
+      helper: "Drafts the workplace application objective."
+    },
+    {
+      key: "observerEvaluator",
+      label: "Survey Designer",
+      helper: "Shapes questions that measure transfer into job behaviour."
+    },
+    {
+      key: "rapporteur",
+      label: "Evidence / Data Collection Officer",
+      helper: "Captures non-survey evidence methods, targets, and barriers."
+    },
+    {
+      key: "presenter",
+      label: "Presenter / Briefer",
+      helper: "Delivers the final Level 3 evaluation briefing.",
+      required: true
+    }
+  ]
+};
 
 function cleanRolesForMembers(rolesValue: Roles, selectedMembers: string[]): Roles {
   return Object.fromEntries(
@@ -89,6 +122,9 @@ function cleanRolesForMembers(rolesValue: Roles, selectedMembers: string[]): Rol
 export function GroupSetup({ data, updateData }: GroupSetupProps) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const selectedCount = data.selectedMembers.length;
+  const roles = rolesByMode[data.mode];
+  const leadRole = roles.find((role) => role.key === "leadFacilitator");
+  const presenterRole = roles.find((role) => role.key === "presenter");
   const requiredMissing = {
     groupName: data.groupName.trim().length === 0,
     members: selectedCount < 2,
@@ -316,9 +352,10 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
         <article className="rounded-2xl border border-field-border bg-white p-5 shadow-sm">
           <h3 className="text-2xl font-bold text-navy-900">Role Assignment</h3>
           <p className="mt-2 text-lg leading-8 text-slate-700">
-            Lead Facilitator and Presenter are required. Other roles are
-            recommended but not mandatory. One person may hold more than one
-            role when the group has fewer than five members.
+            {leadRole?.label ?? "Lead role"} and {presenterRole?.label ?? "Presenter role"}{" "}
+            are required. Other roles are recommended but not mandatory. One
+            person may hold more than one role when the group has fewer than
+            five members.
           </p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             {roles.map((role) => (
@@ -377,13 +414,13 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
               </li>
               <li>
                 {requiredMissing.lead
-                  ? "Required: assign a Lead Facilitator."
-                  : `Lead Facilitator: ${data.roles.leadFacilitator}.`}
+                  ? `Required: assign ${leadRole?.label ?? "the lead role"}.`
+                  : `${leadRole?.label ?? "Lead role"}: ${data.roles.leadFacilitator}.`}
               </li>
               <li>
                 {requiredMissing.presenter
-                  ? "Required: assign a Presenter."
-                  : `Presenter: ${data.roles.presenter}.`}
+                  ? `Required: assign ${presenterRole?.label ?? "the presenter role"}.`
+                  : `${presenterRole?.label ?? "Presenter role"}: ${data.roles.presenter}.`}
               </li>
               {recommendedMissing.length > 0 ? (
                 <li>

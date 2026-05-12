@@ -18,8 +18,24 @@ const phaseStyles: Partial<Record<StepKey, typeof defaultPhase>> = {
     label: "Scenario / Judgment",
     color: "#526D9E"
   },
+  application: {
+    label: "Application Objective",
+    color: "#4B92DB"
+  },
+  survey: {
+    label: "Survey Questions",
+    color: "#2D7D8F"
+  },
+  evidence: {
+    label: "Evidence Methods",
+    color: "#64748B"
+  },
+  targets: {
+    label: "Targets / Transfer",
+    color: "#526D9E"
+  },
   builder: {
-    label: "Final Design",
+    label: "Final Package",
     color: "#5B6F82"
   },
   presentation: {
