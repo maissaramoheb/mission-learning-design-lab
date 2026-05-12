@@ -62,8 +62,8 @@ const stepSets: Record<AppMode, StepDefinition[]> = {
     { key: "evidence", label: "Evidence", shortLabel: "Evidence" },
     { key: "targets", label: "Targets", shortLabel: "Targets" },
     { key: "builder", label: "Package", shortLabel: "Package" },
-    { key: "presentation", label: "Present", shortLabel: "Present" },
-    { key: "export", label: "Export", shortLabel: "Export" }
+    { key: "presentation", label: "Brief", shortLabel: "Brief" },
+    { key: "export", label: "Summary", shortLabel: "Summary" }
   ]
 };
 
@@ -166,18 +166,18 @@ const stepCopy: Record<AppMode, Partial<Record<StepKey, StepCopy>>> = {
         "Define success criteria and identify what may support or block transfer."
     },
     builder: {
-      title: "Final Evaluation Design Package",
+      title: "Build Evaluation Package",
       eyebrow: "Synthesis",
       description:
         "Assemble one coherent Level 3 evaluation package ready to brief."
     },
     presentation: {
-      title: "Presentation Mode",
+      title: "Brief Evaluation Package",
       eyebrow: "Briefing",
       description: "Present the Level 3 evaluation design directly from the app."
     },
     export: {
-      title: "Export / Print Summary",
+      title: "Export Evaluation Summary",
       eyebrow: "Record",
       description: "Save, print, or reset this group’s evaluation package."
     }
@@ -362,6 +362,7 @@ export default function Home() {
   return (
     <>
       <StepLayout
+        mode={data.mode}
         step={step}
         steps={steps}
         title={copy.title}
@@ -381,10 +382,14 @@ export default function Home() {
               ? "Start Evaluation Mission"
               : "Start Learning Mission"
             : step === "builder"
-              ? "Generate Presentation"
+              ? data.mode === "evaluation"
+                ? "Brief Evaluation Package"
+                : "Generate Presentation"
               : step === "export"
                 ? "Finished"
-                : "Continue"
+                : data.mode === "evaluation"
+                  ? "Advance to Next Phase"
+                  : "Continue"
         }
         onBack={() => setStep((current) => previousStep(current, steps))}
         onNext={handleNext}

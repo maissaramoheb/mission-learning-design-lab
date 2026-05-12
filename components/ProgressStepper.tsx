@@ -1,17 +1,19 @@
 "use client";
 
 import { Check } from "lucide-react";
-import type { StepDefinition, StepKey } from "@/types/activity";
+import type { AppMode, StepDefinition, StepKey } from "@/types/activity";
 import { cn } from "@/lib/utils";
 import { getPhaseStyle } from "@/lib/phaseStyles";
 
 type ProgressStepperProps = {
+  mode?: AppMode;
   steps: StepDefinition[];
   currentStep: StepKey;
   onStepClick: (step: StepKey) => void;
 };
 
 export function ProgressStepper({
+  mode = "learning",
   steps,
   currentStep,
   onStepClick
@@ -27,7 +29,7 @@ export function ProgressStepper({
         {steps.map((step, index) => {
           const isActive = step.key === currentStep;
           const isComplete = index < currentIndex;
-          const phase = getPhaseStyle(step.key);
+          const phase = getPhaseStyle(step.key, mode);
 
           return (
             <li key={step.key}>

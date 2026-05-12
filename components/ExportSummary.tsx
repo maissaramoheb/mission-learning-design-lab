@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import type { ActivityData } from "@/types/activity";
 import { Badge } from "@/components/FormElements";
 import { PREPARED_BY, modeContent } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 type ExportSummaryProps = {
   data: ActivityData;
@@ -211,6 +212,7 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
   const summary = useMemo(() => makePlainTextSummary(data), [data]);
   const content = modeContent[data.mode];
   const labels = roleLabels(data);
+  const isEvaluation = data.mode === "evaluation";
 
   const copySummary = async () => {
     try {
@@ -250,17 +252,23 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
 
   return (
     <div className="space-y-8">
-      <div className="no-print flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div
+        className={cn(
+          "no-print flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between",
+          isEvaluation &&
+            "rounded-[1.75rem] border border-[#5d7896]/45 bg-[#081725] p-5 text-white shadow-[0_24px_70px_rgba(2,10,22,0.24)]"
+        )}
+      >
         <div>
           <Badge>Export / Print Summary</Badge>
-          <h2 className="mt-3 text-3xl font-bold text-navy-900">
+          <h2 className={cn("mt-3 text-3xl font-bold text-navy-900", isEvaluation && "text-white")}>
             {data.mode === "evaluation"
               ? "Level 3 Evaluation Design Package"
               : "Group Training Design Summary"}
           </h2>
-          <p className="mt-3 max-w-4xl text-lg leading-8 text-slate-700">
+          <p className={cn("mt-3 max-w-4xl text-lg leading-8 text-slate-700", isEvaluation && "text-white/[0.78]")}>
             {data.mode === "evaluation"
-              ? "Print the evaluation package, copy it into course records, or download a JSON file for later editing."
+              ? "Application Evidence and Transfer-of-Learning Plan. Print the brief, copy it into course records, or download a JSON file for later editing."
               : "Print the group output, copy it into course records, or download a JSON file for later editing."}
           </p>
         </div>
@@ -268,7 +276,10 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md",
+              isEvaluation && "border-[#5d7896]/55 bg-[#10263d] text-white hover:border-[#8ec2f4]"
+            )}
           >
             <Printer size={18} aria-hidden />
             Print
@@ -276,7 +287,10 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
           <button
             type="button"
             onClick={copySummary}
-            className="inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md",
+              isEvaluation && "border-[#5d7896]/55 bg-[#10263d] text-white hover:border-[#8ec2f4]"
+            )}
           >
             <ClipboardCopy size={18} aria-hidden />
             Copy Summary
@@ -284,7 +298,10 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
           <button
             type="button"
             onClick={downloadJson}
-            className="inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md",
+              isEvaluation && "border-[#5d7896]/55 bg-[#10263d] text-white hover:border-[#8ec2f4]"
+            )}
           >
             <Download size={18} aria-hidden />
             Download JSON
@@ -316,6 +333,11 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
               ? "Level 3 Evaluation Design Package"
               : "One Mission Scenario. Three Learning Theories."}
           </h3>
+          {isEvaluation ? (
+            <p className="mt-2 text-lg font-semibold text-slate-700">
+              Application Evidence and Transfer-of-Learning Plan
+            </p>
+          ) : null}
           <p className="mt-2 text-lg text-slate-700">
             Group: {fallback(data.groupName, "Not named")}
           </p>
@@ -325,7 +347,7 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
         </div>
 
         <section className="mt-6 grid gap-5 md:grid-cols-2">
-          <SummaryBlock title="Group Roles">
+          <SummaryBlock title={isEvaluation ? "Evaluation Team" : "Group Roles"}>
             <p>
               <strong>Selected members:</strong>{" "}
               {data.selectedMembers.length > 0
@@ -423,7 +445,7 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
                   )}
                 </p>
               </SummaryBlock>
-              <SummaryBlock title="Targets and Follow-up">
+              <SummaryBlock title="Targets">
                 <p>
                   <strong>Target score:</strong>{" "}
                   {fallback(data.evaluationDesign.targetScore, "Not completed")}
@@ -435,10 +457,6 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
                 <p className="mt-3">
                   <strong>Transfer target:</strong>{" "}
                   {fallback(data.evaluationDesign.transferTarget, "Not completed")}
-                </p>
-                <p className="mt-3">
-                  <strong>Follow-up:</strong>{" "}
-                  {fallback(data.evaluationDesign.followUpAction, "Not completed")}
                 </p>
               </SummaryBlock>
             </section>
@@ -456,8 +474,18 @@ export function ExportSummary({ data, onReset }: ExportSummaryProps) {
               </SummaryBlock>
             </section>
 
+            <section className="mt-5">
+              <SummaryBlock title="Follow-up Action">
+                <p>
+                  {fallback(data.evaluationDesign.followUpAction, "Not completed")}
+                </p>
+              </SummaryBlock>
+            </section>
+
             <section className="mt-5 rounded-xl border border-un-line bg-un-light p-5">
-              <h4 className="text-xl font-bold text-navy-900">Final Message</h4>
+              <h4 className="text-xl font-bold text-navy-900">
+                Final Evaluation Message
+              </h4>
               <p className="mt-2 text-xl leading-9 text-navy-900">
                 {fallback(data.evaluationDesign.finalMessage, "Not completed")}
               </p>

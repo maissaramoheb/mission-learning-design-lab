@@ -6,15 +6,27 @@ import { cn } from "@/lib/utils";
 type FieldShellProps = {
   label: string;
   helper?: string;
+  tone?: "default" | "tactical";
   children: ReactNode;
 };
 
-export function FieldShell({ label, helper, children }: FieldShellProps) {
+export function FieldShell({
+  label,
+  helper,
+  tone = "default",
+  children
+}: FieldShellProps) {
+  const tactical = tone === "tactical";
+
   return (
     <label className="block">
-      <span className="block text-base font-bold text-navy-900">{label}</span>
+      <span className={cn("block text-base font-bold text-navy-900", tactical && "text-white")}>
+        {label}
+      </span>
       {helper ? (
-        <span className="mt-1 block text-sm leading-6 text-slate-600">{helper}</span>
+        <span className={cn("mt-1 block text-sm leading-6 text-slate-600", tactical && "text-white/[0.72]")}>
+          {helper}
+        </span>
       ) : null}
       <span className="mt-2 block">{children}</span>
     </label>
@@ -77,23 +89,31 @@ type OptionToggleProps = {
   label: string;
   onClick: () => void;
   description?: string;
+  tone?: "default" | "tactical";
 };
 
 export function OptionToggle({
   selected,
   label,
   onClick,
-  description
+  description,
+  tone = "default"
 }: OptionToggleProps) {
+  const tactical = tone === "tactical";
+
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
         "rounded-xl border px-4 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
-        selected
-          ? "border-un-blue bg-un-light text-navy-900 ring-2 ring-un-line"
-          : "border-field-border bg-white text-slate-700 hover:border-un-line"
+        tactical
+          ? selected
+            ? "border-[#8ec2f4] bg-[#123352] text-white ring-2 ring-[#5da7f2]/35"
+            : "border-[#5d7896]/45 bg-[#081725] text-white/[0.82] hover:border-[#8ec2f4]"
+          : selected
+            ? "border-un-blue bg-un-light text-navy-900 ring-2 ring-un-line"
+            : "border-field-border bg-white text-slate-700 hover:border-un-line"
       )}
     >
       <span className="block text-base font-bold">{label}</span>

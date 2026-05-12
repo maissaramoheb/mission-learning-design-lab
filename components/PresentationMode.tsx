@@ -241,12 +241,12 @@ function buildEvaluationSlides(data: ActivityData): Slide[] {
         },
         {
           label: "Credit",
-          value: PREPARED_BY
+          value: content.productCredit
         }
       ]
     },
     {
-      title: "Training Topic and Learning Objective",
+      title: "Training Topic & Learning Objective",
       kicker: "Evaluation starting point",
       content: [
         {
@@ -278,7 +278,7 @@ function buildEvaluationSlides(data: ActivityData): Slide[] {
       ]
     },
     {
-      title: "Main Survey Structure",
+      title: "Level 3 Survey Architecture",
       kicker: "Application evidence questions",
       content: [
         {
@@ -316,7 +316,7 @@ function buildEvaluationSlides(data: ActivityData): Slide[] {
       ]
     },
     {
-      title: "Additional Evidence Methods",
+      title: "Evidence Methods Beyond Survey",
       kicker: "Beyond self-report",
       content: [
         {
@@ -355,7 +355,7 @@ function buildEvaluationSlides(data: ActivityData): Slide[] {
       ]
     },
     {
-      title: "Expected Barriers and Enablers",
+      title: "Barriers / Enablers / Risk to Transfer",
       kicker: "Transfer conditions",
       content: [
         {
@@ -375,7 +375,7 @@ function buildEvaluationSlides(data: ActivityData): Slide[] {
       ]
     },
     {
-      title: "Follow-up if Targets Are Not Met",
+      title: "Follow-up Action if Target Is Not Met",
       kicker: "Corrective action",
       content: [
         {
@@ -387,7 +387,7 @@ function buildEvaluationSlides(data: ActivityData): Slide[] {
       ]
     },
     {
-      title: "Final Message",
+      title: "Final Message: Evidence of Transfer",
       kicker: "Evaluation principle",
       content: [
         {
@@ -409,6 +409,7 @@ export function PresentationMode({
   const [slideIndex, setSlideIndex] = useState(0);
   const groupIdentity = getGroupIdentity(data.groupName);
   const content = modeContent[data.mode];
+  const isEvaluation = data.mode === "evaluation";
 
   const slides = useMemo<Slide[]>(
     () => (data.mode === "evaluation" ? buildEvaluationSlides(data) : buildLearningSlides(data)),
@@ -438,28 +439,57 @@ export function PresentationMode({
   }, [onExit, slides.length]);
 
   return (
-    <main className="min-h-screen bg-navy-900 p-4 text-white [background-image:radial-gradient(circle_at_20%_10%,rgba(75,146,219,.22),transparent_28%),linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] [background-size:auto,44px_44px,44px_44px] md:p-6">
-      <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-7xl flex-col overflow-hidden rounded-[2rem] border border-white/15 bg-white text-field-ink shadow-command md:min-h-[calc(100vh-3rem)]">
-        <header className="no-print flex flex-col gap-4 border-b border-field-border bg-field-mist/70 p-4 lg:flex-row lg:items-center lg:justify-between">
+    <main
+      className={cn(
+        "min-h-screen bg-navy-900 p-4 text-white [background-image:radial-gradient(circle_at_20%_10%,rgba(75,146,219,.22),transparent_28%),linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] [background-size:auto,44px_44px,44px_44px] md:p-6",
+        isEvaluation &&
+          "bg-[#050f1a] [background-image:radial-gradient(circle_at_18%_10%,rgba(93,167,242,.22),transparent_28%),radial-gradient(circle_at_84%_12%,rgba(210,166,90,.12),transparent_24%),linear-gradient(rgba(116,145,172,.11)_1px,transparent_1px),linear-gradient(90deg,rgba(116,145,172,.08)_1px,transparent_1px)]"
+      )}
+    >
+      <div
+        className={cn(
+          "mx-auto flex min-h-[calc(100vh-2rem)] max-w-7xl flex-col overflow-hidden rounded-[2rem] border border-white/15 bg-white text-field-ink shadow-command md:min-h-[calc(100vh-3rem)]",
+          isEvaluation &&
+            "border-[#5d7896]/45 bg-[#071725] text-white shadow-[0_30px_90px_rgba(0,0,0,0.38)]"
+        )}
+      >
+        <header
+          className={cn(
+            "no-print flex flex-col gap-4 border-b border-field-border bg-field-mist/70 p-4 lg:flex-row lg:items-center lg:justify-between",
+            isEvaluation && "border-[#5d7896]/35 bg-[#081725]"
+          )}
+        >
           <div>
-            <p className="text-sm font-bold uppercase text-un-blue">
+            <p className={cn("text-sm font-bold uppercase text-un-blue", isEvaluation && "text-[#8ec2f4]")}>
               {content.appTitle}
             </p>
-            <p className="text-lg font-bold text-navy-900">
+            <p className={cn("text-lg font-bold text-navy-900", isEvaluation && "text-white")}>
               {data.mode === "evaluation"
-                ? "Evaluation briefing deck. Use arrow keys to navigate."
+                ? "Tactical briefing deck. Use arrow keys to navigate."
                 : "Mission briefing deck. Use arrow keys to navigate."}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <span className="inline-flex items-center justify-center rounded-full border border-un-line bg-un-light px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] text-navy-900">
+            <span
+              className={cn(
+                "inline-flex items-center justify-center rounded-full border border-un-line bg-un-light px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] text-navy-900",
+                isEvaluation && "border-[#7fb8ef]/35 bg-[#123352] text-[#d7ecff]"
+              )}
+            >
               {groupIdentity?.label ?? "Group"}
             </span>
-            <Timer seconds={180} label="Presentation time" />
+            <Timer
+              seconds={180}
+              label="Presentation time"
+              variant={isEvaluation ? "tactical" : "default"}
+            />
             <button
               type="button"
               onClick={onSummary}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
+              className={cn(
+                "inline-flex items-center justify-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md",
+                isEvaluation && "border-[#5d7896]/55 bg-[#10263d] text-white hover:border-[#8ec2f4]"
+              )}
             >
               <FileDown size={18} aria-hidden />
               Summary
@@ -467,7 +497,10 @@ export function PresentationMode({
             <button
               type="button"
               onClick={onExit}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-navy-900 px-4 py-3 font-bold text-white shadow-lg shadow-navy-900/20 transition hover:-translate-y-0.5 hover:bg-navy-800"
+              className={cn(
+                "inline-flex items-center justify-center gap-2 rounded-xl bg-navy-900 px-4 py-3 font-bold text-white shadow-lg shadow-navy-900/20 transition hover:-translate-y-0.5 hover:bg-navy-800",
+                isEvaluation && "bg-[#123352] hover:bg-[#19446b]"
+              )}
             >
               <X size={18} aria-hidden />
               Exit
@@ -476,18 +509,18 @@ export function PresentationMode({
         </header>
 
         <section className="relative flex flex-1 flex-col justify-center overflow-hidden p-7 md:p-12 lg:p-16">
-          <div className="absolute inset-y-0 right-0 hidden w-28 border-l border-un-line bg-un-light/70 lg:block" />
-          <div className="absolute left-0 top-0 h-full w-2 bg-un-blue" />
+          <div className={cn("absolute inset-y-0 right-0 hidden w-28 border-l border-un-line bg-un-light/70 lg:block", isEvaluation && "border-[#5d7896]/35 bg-[#10263d]/[0.78]")} />
+          <div className={cn("absolute left-0 top-0 h-full w-2 bg-un-blue", isEvaluation && "bg-[#d2a65a]")} />
           <div className="relative">
-            <p className="text-base font-bold uppercase tracking-[0.18em] text-un-blue">
+            <p className={cn("text-base font-bold uppercase tracking-[0.18em] text-un-blue", isEvaluation && "text-[#8ec2f4]")}>
               Slide {slideIndex + 1} of {slides.length}
             </p>
             {currentSlide.kicker ? (
-              <p className="mt-3 max-w-5xl text-2xl font-bold text-navy-700">
+              <p className={cn("mt-3 max-w-5xl text-2xl font-bold text-navy-700", isEvaluation && "text-[#d7ecff]")}>
                 {currentSlide.kicker}
               </p>
             ) : null}
-            <h1 className="mt-4 max-w-5xl text-5xl font-bold leading-tight text-navy-900 md:text-7xl">
+            <h1 className={cn("mt-4 max-w-5xl text-5xl font-bold leading-tight text-navy-900 md:text-7xl", isEvaluation && "text-white")}>
               {currentSlide.title}
             </h1>
 
@@ -497,25 +530,28 @@ export function PresentationMode({
                   key={`${item.label ?? "content"}-${index}`}
                   className={cn(
                     "rounded-2xl border border-field-border bg-field-mist p-5 shadow-sm",
-                    slideIndex === 0 && "bg-white"
+                    slideIndex === 0 && "bg-white",
+                    isEvaluation &&
+                      "border-[#5d7896]/45 bg-[#10263d] text-white shadow-[0_18px_48px_rgba(2,10,22,0.22)]",
+                    isEvaluation && slideIndex === 0 && "bg-[#123352]"
                   )}
                 >
                   {item.label ? (
-                    <p className="mb-2 text-sm font-bold uppercase tracking-[0.12em] text-un-blue">
+                    <p className={cn("mb-2 text-sm font-bold uppercase tracking-[0.12em] text-un-blue", isEvaluation && "text-[#8ec2f4]")}>
                       {item.label}
                     </p>
                   ) : null}
                   {Array.isArray(item.value) ? (
-                    <ul className="grid gap-2 text-2xl leading-10 text-navy-900 md:grid-cols-2">
+                    <ul className={cn("grid gap-2 text-2xl leading-10 text-navy-900 md:grid-cols-2", isEvaluation && "text-white")}>
                       {item.value.map((entry) => (
                         <li key={entry} className="flex gap-3">
-                          <span className="mt-4 h-2 w-2 shrink-0 rounded-full bg-un-blue" />
+                          <span className={cn("mt-4 h-2 w-2 shrink-0 rounded-full bg-un-blue", isEvaluation && "bg-[#d2a65a]")} />
                           <span>{entry}</span>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="whitespace-pre-line text-2xl leading-10 text-navy-900">
+                    <p className={cn("whitespace-pre-line text-2xl leading-10 text-navy-900", isEvaluation && "text-white")}>
                       {item.value}
                     </p>
                   )}
@@ -525,16 +561,21 @@ export function PresentationMode({
           </div>
         </section>
 
-        <footer className="flex flex-col gap-4 border-t border-field-border bg-white p-4 md:flex-row md:items-center md:justify-between">
+        <footer
+          className={cn(
+            "flex flex-col gap-4 border-t border-field-border bg-white p-4 md:flex-row md:items-center md:justify-between",
+            isEvaluation && "border-[#5d7896]/35 bg-[#081725]"
+          )}
+        >
           <div className="flex flex-col gap-1">
             <div className="no-print flex items-center gap-2">
-              <Clock3 size={18} className="text-un-blue" aria-hidden />
-              <span className="font-semibold text-navy-800">
+              <Clock3 size={18} className={cn("text-un-blue", isEvaluation && "text-[#8ec2f4]")} aria-hidden />
+              <span className={cn("font-semibold text-navy-800", isEvaluation && "text-white")}>
                 Projector-friendly slide view
               </span>
             </div>
-            <p className="text-sm font-semibold text-slate-600">
-              {PREPARED_BY}
+            <p className={cn("text-sm font-semibold text-slate-600", isEvaluation && "text-white/[0.74]")}>
+              {isEvaluation ? content.productCredit : PREPARED_BY}
               {data.groupName.trim() ? ` | ${data.groupName}` : ""}
             </p>
           </div>
@@ -547,7 +588,13 @@ export function PresentationMode({
                 onClick={() => setSlideIndex(index)}
                 className={cn(
                   "h-3 w-9 rounded-full transition",
-                  slideIndex === index ? "bg-un-blue" : "bg-field-border"
+                  slideIndex === index
+                    ? isEvaluation
+                      ? "bg-[#d2a65a]"
+                      : "bg-un-blue"
+                    : isEvaluation
+                      ? "bg-[#5d7896]/55"
+                      : "bg-field-border"
                 )}
               />
             ))}
@@ -557,7 +604,10 @@ export function PresentationMode({
               type="button"
               onClick={previous}
               disabled={slideIndex === 0}
-              className="inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md disabled:opacity-45 disabled:hover:translate-y-0"
+              className={cn(
+                "inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md disabled:opacity-45 disabled:hover:translate-y-0",
+                isEvaluation && "border-[#5d7896]/55 bg-[#10263d] text-white hover:border-[#8ec2f4]"
+              )}
             >
               <ArrowLeft size={18} aria-hidden />
               Previous
@@ -566,7 +616,10 @@ export function PresentationMode({
               type="button"
               onClick={next}
               disabled={slideIndex === slides.length - 1}
-              className="inline-flex items-center gap-2 rounded-xl bg-navy-900 px-4 py-3 font-bold text-white shadow-lg shadow-navy-900/20 transition hover:-translate-y-0.5 hover:bg-navy-800 disabled:opacity-45 disabled:hover:translate-y-0"
+              className={cn(
+                "inline-flex items-center gap-2 rounded-xl bg-navy-900 px-4 py-3 font-bold text-white shadow-lg shadow-navy-900/20 transition hover:-translate-y-0.5 hover:bg-navy-800 disabled:opacity-45 disabled:hover:translate-y-0",
+                isEvaluation && "bg-[#123352] hover:bg-[#19446b]"
+              )}
             >
               Next
               <ArrowRight size={18} aria-hidden />
