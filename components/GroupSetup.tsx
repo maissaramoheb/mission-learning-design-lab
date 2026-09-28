@@ -21,26 +21,44 @@ type GroupSetupProps = {
 };
 
 const participantRoster = [
-  "Colonel Mohamed Badr",
-  "Colonel Ramez Hegazy",
-  "Lt. Col Mohamed Dessouky",
-  "Lt. Col Ahmed Mamdouh — Police Academy",
-  "Lt. Col Mohamed Elbadry",
-  "Lt. Col Tarek Nouh",
-  "Lt. Col Mohamed Sarhan",
-  "Major Amr Madkour",
-  "Major Saifeleslam Fakry"
+  "Brig. / Amr Abou Hassan",
+  "Col. / Ahmed Ibrahim",
+  "Col. / Mohamed Abdel Gayed",
+  "Lt. Col. / Sherif Makawy",
+  "Lt. Col. / Mina Bekhit",
+  "Lt. Col. / Mahmoud Soliman",
+  "Lt. Col. / Ayman Ibrahim",
+  "Maj. / Manar Ashraf",
+  "Col. / Mohamed Abdel Dayem",
+  "Maj. / Madonna Magdy",
+  "Col. / Sayed Abd Elghany",
+  "Lt. Col. / Ahmed Abdo",
+  "Lt. Col. / Moamen Talaat",
+  "Lt. Col. / Mahmoud Ramadan",
+  "Lt. Col. / Ahmed Gaber",
+  "Maj. / Shady Ashraf"
 ];
 
-const suggestedGroups = [
-  [
-    "Colonel Mohamed Badr",
-    "Lt. Col Ahmed Mamdouh — Police Academy",
-    "Major Amr Madkour"
-  ],
-  ["Colonel Ramez Hegazy", "Lt. Col Mohamed Elbadry", "Major Saifeleslam Fakry"],
-  ["Lt. Col Mohamed Dessouky", "Lt. Col Tarek Nouh", "Lt. Col Mohamed Sarhan"]
-];
+function generateBalancedGroups(count: 3 | 4, roster: string[]): string[][] {
+  const shuffled = [...roster];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  if (count === 3) {
+    return [
+      shuffled.slice(0, 6),
+      shuffled.slice(6, 11),
+      shuffled.slice(11, 16)
+    ];
+  }
+  return [
+    shuffled.slice(0, 4),
+    shuffled.slice(4, 8),
+    shuffled.slice(8, 12),
+    shuffled.slice(12, 16)
+  ];
+}
 
 type RoleDescriptor = {
   key: keyof Roles;
@@ -120,14 +138,15 @@ function cleanRolesForMembers(rolesValue: Roles, selectedMembers: string[]): Rol
 }
 
 export function GroupSetup({ data, updateData }: GroupSetupProps) {
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [groupCountChoice, setGroupCountChoice] = useState<3 | 4>(3);
+  const [generatedGroups, setGeneratedGroups] = useState<string[][] | null>(null);
   const selectedCount = data.selectedMembers.length;
   const roles = rolesByMode[data.mode];
   const leadRole = roles.find((role) => role.key === "leadFacilitator");
   const presenterRole = roles.find((role) => role.key === "presenter");
   const requiredMissing = {
     groupName: data.groupName.trim().length === 0,
-    members: selectedCount < 2,
+    members: selectedCount < 3 || selectedCount > 6,
     lead: data.roles.leadFacilitator.trim().length === 0,
     presenter: data.roles.presenter.trim().length === 0
   };
@@ -135,10 +154,25 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
     (role) => !role.required && !data.roles[role.key]
   );
 
+  const handleGenerateGroups = (count: 3 | 4 = groupCountChoice) => {
+    setGeneratedGroups(generateBalancedGroups(count, participantRoster));
+  };
+
+  const handleSelectGroupCount = (count: 3 | 4) => {
+    setGroupCountChoice(count);
+    if (generatedGroups !== null) {
+      setGeneratedGroups(generateBalancedGroups(count, participantRoster));
+    }
+  };
+
   const toggleMember = (member: string) => {
+    const isSelected = data.selectedMembers.includes(member);
+    if (!isSelected && data.selectedMembers.length >= 6) {
+      return;
+    }
     const selectedMembers = toggleInArray(data.selectedMembers, member);
     const memberCount = selectedMembers.length
-      ? (String(Math.min(selectedMembers.length, 5)) as ActivityData["memberCount"])
+      ? (String(Math.min(selectedMembers.length, 6)) as ActivityData["memberCount"])
       : "";
 
     updateData({
@@ -158,10 +192,11 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
   };
 
   const applySuggestedGroup = (members: string[], index: number) => {
+    const defaultName = groupIdentities[index]?.title ?? `Group ${index + 1}`;
     updateData({
-      groupName: data.groupName.trim() ? data.groupName : `Group ${index + 1}`,
+      groupName: data.groupName.trim() ? data.groupName : defaultName,
       selectedMembers: members,
-      memberCount: String(members.length),
+      memberCount: String(Math.min(members.length, 6)),
       roles: cleanRolesForMembers(data.roles, members)
     });
   };
@@ -187,7 +222,7 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
         <div className="space-y-3">
           <FieldShell
             label="Group Name"
-            helper="Required. Use Alpha, Bravo, or Charlie for the clearest group identity."
+            helper="Required. Use Alpha, Bravo, Charlie, or Delta for the clearest group identity."
           >
             <TextInput
               value={data.groupName}
@@ -221,8 +256,8 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
                 Facilitator group allocation
               </h3>
               <p className="mt-2 text-lg leading-8 text-slate-700">
-                The facilitator divides the class into three groups. Each group
-                selects its members from the roster on its own laptop.
+                The facilitator divides the class into three or four groups. Each
+                group selects its members from the roster on its own laptop.
               </p>
             </div>
           </div>
@@ -236,7 +271,7 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
               Participant Roster
             </h3>
             <p className="mt-2 text-lg leading-8 text-slate-700">
-              Select at least two members for this group.
+              Select 3 to 6 members for this group.
             </p>
           </div>
           <div className="rounded-xl border border-field-border bg-field-mist px-4 py-3">
@@ -245,7 +280,7 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-field-border bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-4 flex flex-col gap-4 rounded-2xl border border-field-border bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
           <div className="flex gap-3">
             <Lightbulb className="mt-1 text-un-blue" size={22} aria-hidden />
             <div>
@@ -253,59 +288,120 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
                 Facilitator testing/demo support
               </p>
               <p className="text-sm leading-6 text-slate-600">
-                Generate three balanced group suggestions from the built-in
+                Generate balanced group suggestions from the built-in
                 roster. Groups may still select members manually.
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowSuggestions((value) => !value)}
-            className="inline-flex items-center justify-center rounded-xl border border-un-line bg-un-light px-4 py-3 font-bold text-navy-900 transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
-          >
-            Suggest 3 Balanced Groups
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex rounded-xl border border-un-line bg-un-light p-1">
+              <button
+                type="button"
+                onClick={() => handleSelectGroupCount(3)}
+                className={cn(
+                  "rounded-lg px-3 py-2 text-sm font-bold transition",
+                  groupCountChoice === 3
+                    ? "bg-navy-900 text-white shadow-sm"
+                    : "text-navy-800 hover:text-navy-900"
+                )}
+                aria-pressed={groupCountChoice === 3}
+              >
+                3 Groups
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSelectGroupCount(4)}
+                className={cn(
+                  "rounded-lg px-3 py-2 text-sm font-bold transition",
+                  groupCountChoice === 4
+                    ? "bg-navy-900 text-white shadow-sm"
+                    : "text-navy-800 hover:text-navy-900"
+                )}
+                aria-pressed={groupCountChoice === 4}
+              >
+                4 Groups
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleGenerateGroups(groupCountChoice)}
+              className="inline-flex items-center justify-center rounded-xl border border-un-line bg-un-light px-4 py-3 font-bold text-navy-900 transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md"
+            >
+              Generate Balanced Groups
+            </button>
+            {generatedGroups !== null ? (
+              <button
+                type="button"
+                onClick={() => setGeneratedGroups(null)}
+                className="inline-flex items-center justify-center rounded-xl border border-field-border bg-white px-3 py-3 text-sm font-semibold text-slate-600 transition hover:border-un-line hover:text-navy-900"
+              >
+                Hide
+              </button>
+            ) : null}
+          </div>
         </div>
 
-        {showSuggestions ? (
-          <div className="mt-4 grid gap-3 lg:grid-cols-3">
-            {suggestedGroups.map((members, index) => (
-              <article
-                key={`suggested-group-${index + 1}`}
-                className="rounded-2xl border border-un-line bg-un-light p-4 shadow-sm"
-              >
-                <p className="text-sm font-bold uppercase text-un-blue">
-                  Suggested Group {index + 1}
-                </p>
-                <ul className="mt-3 space-y-2 text-base font-semibold leading-7 text-navy-900">
-                  {members.map((member) => (
-                    <li key={member}>{member}</li>
-                  ))}
-                </ul>
-                <button
-                  type="button"
-                  onClick={() => applySuggestedGroup(members, index)}
-                  className="mt-4 w-full rounded-xl bg-navy-900 px-4 py-3 font-bold text-white transition hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-md"
+        {generatedGroups !== null ? (
+          <div
+            className={cn(
+              "mt-4 grid gap-3",
+              generatedGroups.length === 4
+                ? "sm:grid-cols-2 lg:grid-cols-4"
+                : "lg:grid-cols-3"
+            )}
+          >
+            {generatedGroups.map((members, index) => {
+              const identity = groupIdentities[index];
+              const groupTitle = identity?.title ?? `Group ${index + 1}`;
+              return (
+                <article
+                  key={`suggested-group-${identity?.key ?? index + 1}`}
+                  className="flex flex-col justify-between rounded-2xl border border-un-line bg-un-light p-4 shadow-sm"
                 >
-                  Use this group
-                </button>
-              </article>
-            ))}
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-bold uppercase text-un-blue">
+                        {groupTitle}
+                      </p>
+                      <span className="rounded-full border border-un-line bg-white px-2 py-0.5 text-xs font-bold text-slate-700">
+                        {members.length} members
+                      </span>
+                    </div>
+                    <ul className="mt-3 space-y-2 text-base font-semibold leading-7 text-navy-900">
+                      {members.map((member) => (
+                        <li key={member}>{member}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => applySuggestedGroup(members, index)}
+                    className="mt-4 w-full rounded-xl bg-navy-900 px-4 py-3 font-bold text-white transition hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-md"
+                  >
+                    Use this group
+                  </button>
+                </article>
+              );
+            })}
           </div>
         ) : null}
 
         <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {participantRoster.map((member) => {
             const selected = data.selectedMembers.includes(member);
+            const disabled = !selected && selectedCount >= 6;
             return (
               <button
                 type="button"
                 key={member}
                 onClick={() => toggleMember(member)}
+                disabled={disabled}
                 className={cn(
                   "flex min-h-[92px] items-start gap-3 rounded-2xl border px-4 py-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
                   selected
                     ? "border-un-blue bg-un-light text-navy-900 ring-2 ring-un-line"
+                    : disabled
+                    ? "cursor-not-allowed border-field-border bg-slate-50 text-slate-400 opacity-60 hover:translate-y-0 hover:shadow-none"
                     : "border-field-border bg-white text-slate-700 hover:border-un-line"
                 )}
                 aria-pressed={selected}
@@ -409,7 +505,7 @@ export function GroupSetup({ data, updateData }: GroupSetupProps) {
               </li>
               <li>
                 {requiredMissing.members
-                  ? "Required: select at least 2 group members."
+                  ? "Required: select 3 to 6 group members."
                   : `Selected members: ${selectedCount}.`}
               </li>
               <li>

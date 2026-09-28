@@ -47,7 +47,7 @@ export function FacilitatorGuide({
           <div className="rounded-xl border border-field-border bg-field-mist p-5">
             <h3 className="mb-3 text-xl font-bold text-navy-900">How to run</h3>
             <ol className="space-y-2 text-lg leading-8 text-slate-700">
-              <li>1. Divide participants into three groups.</li>
+              <li>1. Divide participants into three or four groups.</li>
               <li>2. Each group opens the app on one laptop.</li>
               <li>3. Groups select members and assign roles.</li>
               <li>

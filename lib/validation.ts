@@ -7,7 +7,8 @@ function hasText(value: string): boolean {
 export function isGroupSetupValid(data: ActivityData): boolean {
   return (
     hasText(data.groupName) &&
-    data.selectedMembers.length >= 2 &&
+    data.selectedMembers.length >= 3 &&
+    data.selectedMembers.length <= 6 &&
     hasText(data.roles.leadFacilitator) &&
     hasText(data.roles.presenter)
   );
@@ -17,7 +18,8 @@ function getLearningMissingFields(data: ActivityData): string[] {
   const missing: string[] = [];
 
   if (!hasText(data.groupName)) missing.push("group name");
-  if (data.selectedMembers.length < 2) missing.push("at least 2 group members");
+  if (data.selectedMembers.length < 3) missing.push("at least 3 group members");
+  if (data.selectedMembers.length > 6) missing.push("no more than 6 group members");
   if (!hasText(data.roles.leadFacilitator)) missing.push("Lead Facilitator role");
   if (!hasText(data.roles.presenter)) missing.push("Presenter role");
   if (!hasText(data.design.smartObjective)) missing.push("SMART objective");
@@ -37,7 +39,8 @@ function getEvaluationMissingFields(data: ActivityData): string[] {
   const missing: string[] = [];
 
   if (!hasText(data.groupName)) missing.push("group name");
-  if (data.selectedMembers.length < 2) missing.push("at least 2 group members");
+  if (data.selectedMembers.length < 3) missing.push("at least 3 group members");
+  if (data.selectedMembers.length > 6) missing.push("no more than 6 group members");
   if (!hasText(data.roles.leadFacilitator)) missing.push("Evaluation Lead role");
   if (!hasText(data.roles.presenter)) missing.push("Presenter / Briefer role");
   if (!hasText(data.evaluationDesign.trainingTopic)) missing.push("training topic");

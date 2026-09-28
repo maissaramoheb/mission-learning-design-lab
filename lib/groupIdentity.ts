@@ -16,6 +16,12 @@ export const groupIdentities = [
     label: "Charlie",
     title: "Charlie Team",
     tone: "border-[#AFC4D2] bg-[#E8F1F5] text-navy-900"
+  },
+  {
+    key: "delta",
+    label: "Delta",
+    title: "Delta Team",
+    tone: "border-[#B4C6D4] bg-[#EBF2F6] text-navy-900"
   }
 ] as const;
 
