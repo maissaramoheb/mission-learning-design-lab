@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Mission Learning Design Lab"
+type: software
+authors:
+  - family-names: "Selim"
+    given-names: "Maissara"
+version: "1.0.0"
+date-released: 2026-10-01
+abstract: "A browser-based collaborative learning design application for peacekeeping training environments, supporting group-based learning theory activities, evaluation design exercises, presentation workflows, and printable training outputs."
+repository-code: "https://github.com/maissaramoheb/mission-learning-design-lab"
+keywords:
+  - "peacekeeping training"
+  - "training of trainers"
+  - "learning design"
+  - "learning theories"
+  - "training evaluation"
+  - "capacity building"
+  - "United Nations Police"
