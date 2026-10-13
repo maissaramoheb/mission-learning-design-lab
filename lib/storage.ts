@@ -251,15 +251,21 @@ export function loadActivityData(): ActivityData {
   }
 }
 
-export function saveActivityData(data: ActivityData): void {
+export function saveActivityData(data: ActivityData): boolean {
   if (typeof window === "undefined") {
-    return;
+    return false;
   }
 
-  window.localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({ ...data, updatedAt: new Date().toISOString() })
-  );
+  try {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ ...data, updatedAt: new Date().toISOString() })
+    );
+    return true;
+  } catch {
+    // The caller must show that the latest in-memory work is not persisted.
+    return false;
+  }
 }
 
 export function resetActivityData(): void {
@@ -284,10 +290,15 @@ export function loadCurrentStep(): StepKey {
   return raw && validSteps.includes(raw as StepKey) ? (raw as StepKey) : "welcome";
 }
 
-export function saveCurrentStep(step: StepKey): void {
+export function saveCurrentStep(step: StepKey): boolean {
   if (typeof window === "undefined") {
-    return;
+    return false;
   }
 
-  window.localStorage.setItem(STEP_STORAGE_KEY, step);
+  try {
+    window.localStorage.setItem(STEP_STORAGE_KEY, step);
+    return true;
+  } catch {
+    return false;
+  }
 }

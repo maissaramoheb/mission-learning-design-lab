@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AlertCircle,
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
@@ -28,7 +29,7 @@ type StepLayoutProps = {
   appTitle: string;
   mainTagline: string;
   commandLabel: string;
-  saveStatus: "loading" | "saving" | "saved";
+  saveStatus: "loading" | "saving" | "saved" | "error";
   progressPercent: number;
   groupName: string;
   children: ReactNode;
@@ -64,7 +65,11 @@ export function StepLayout({
   onOpenGuide
 }: StepLayoutProps) {
   const saveLabel =
-    saveStatus === "saving" ? "Saving..." : "Saved locally on this device";
+    saveStatus === "error"
+      ? "Not saved on this device"
+      : saveStatus === "saving"
+        ? "Saving..."
+        : "Saved locally on this device";
   const groupIdentity = getGroupIdentity(groupName);
   const phase = getPhaseStyle(step, mode);
   const isEvaluation = mode === "evaluation";
@@ -143,7 +148,11 @@ export function StepLayout({
                   </p>
                   <p className="mt-2 text-base font-bold text-white">{saveLabel}</p>
                   <p className="mt-2 text-sm font-semibold text-white/[0.68]">
-                    Saved locally on this device
+                    {saveStatus === "error"
+                      ? "Keep this tab open and export a backup."
+                      : saveStatus === "saving"
+                        ? "Saving your changes..."
+                        : "Saved locally on this device"}
                   </p>
                 </div>
                 <div className="rounded-[1.35rem] border border-[#5d7896]/45 bg-[#081725]/[0.94] p-4">
@@ -230,7 +239,9 @@ export function StepLayout({
                 </div>
                 <div className="rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-4 backdrop-blur">
                   <div className="flex items-start gap-3">
-                    {saveStatus === "saving" ? (
+                    {saveStatus === "error" ? (
+                      <AlertCircle className="mt-1 text-amber-300" size={20} aria-hidden />
+                    ) : saveStatus === "saving" ? (
                       <Database className="mt-1 text-un-line" size={20} aria-hidden />
                     ) : (
                       <CheckCircle2 className="mt-1 text-un-line" size={20} aria-hidden />
