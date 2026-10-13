@@ -207,7 +207,7 @@ export default function Home() {
   const [step, setStep] = useState<StepKey>("welcome");
   const [loaded, setLoaded] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<"loading" | "saving" | "saved">(
+  const [saveStatus, setSaveStatus] = useState<"loading" | "saving" | "saved" | "error">(
     "loading"
   );
   const steps = stepSets[data.mode];
@@ -236,18 +236,14 @@ export default function Home() {
     }
 
     setSaveStatus("saving");
-    saveActivityData(data);
-    const id = window.setTimeout(() => setSaveStatus("saved"), 450);
-    return () => window.clearTimeout(id);
-  }, [data, loaded]);
-
-  useEffect(() => {
-    if (!loaded) {
+    // Keep both write outcomes in one effect so a success timer cannot hide a failure.
+    if (!saveActivityData(data) || !saveCurrentStep(step)) {
+      setSaveStatus("error");
       return;
     }
-
-    saveCurrentStep(step);
-  }, [step, loaded]);
+    const id = window.setTimeout(() => setSaveStatus("saved"), 450);
+    return () => window.clearTimeout(id);
+  }, [data, loaded, step]);
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -349,18 +345,32 @@ export default function Home() {
     );
   }
 
+  const saveWarning = saveStatus === "error" ? (
+    <p
+      role="alert"
+      className="no-print mx-auto max-w-7xl border border-amber-200 bg-amber-50 px-5 py-3 font-semibold text-amber-900"
+    >
+      Autosave unavailable. Keep this tab open and download a JSON backup from
+      Export before leaving. Your latest changes are not saved on this device.
+    </p>
+  ) : null;
+
   if (step === "presentation") {
     return (
-      <PresentationMode
-        data={data}
-        onExit={() => setStep("builder")}
-        onSummary={() => setStep("export")}
-      />
+      <>
+        {saveWarning}
+        <PresentationMode
+          data={data}
+          onExit={() => setStep("builder")}
+          onSummary={() => setStep("export")}
+        />
+      </>
     );
   }
 
   return (
     <>
+      {saveWarning}
       <StepLayout
         mode={data.mode}
         step={step}

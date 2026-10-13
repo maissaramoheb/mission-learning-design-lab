@@ -92,6 +92,15 @@ vercel --prod
 
 Group work is saved only in the local browser on the laptop being used. If a group changes laptops, browsers, private browsing mode, or clears browser data, its saved work may not be available.
 
+If browser storage is full or unavailable for writes, the app keeps the current
+work in memory and displays an autosave warning. Keep that tab open and download
+a JSON backup from Export before leaving. Autosave retries on the next edit or
+phase change; a successful save restores the normal status. This does not make
+unsaved work survive a reload or restore an exported JSON file automatically.
+
+Storage regression checks use the existing TypeScript dependency and Node's
+built-in test runner: `npm run test:storage`.
+
 ## Tech Stack
 
 - Next.js App Router

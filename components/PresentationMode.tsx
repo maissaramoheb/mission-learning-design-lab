@@ -448,14 +448,16 @@ export function PresentationMode({
     >
       <div
         className={cn(
-          "mx-auto flex min-h-[calc(100vh-2rem)] max-w-7xl flex-col overflow-hidden rounded-[2rem] border border-white/15 bg-white text-field-ink shadow-command md:min-h-[calc(100vh-3rem)]",
+          "mx-auto flex min-h-[calc(100vh-2rem)] max-w-7xl flex-col overflow-hidden rounded-[2rem] border border-white/15 text-field-ink shadow-command md:min-h-[calc(100vh-3rem)]",
+          !isEvaluation && "bg-white",
           isEvaluation &&
             "border-[#5d7896]/45 bg-[#071725] text-white shadow-[0_30px_90px_rgba(0,0,0,0.38)]"
         )}
       >
         <header
           className={cn(
-            "no-print flex flex-col gap-4 border-b border-field-border bg-field-mist/70 p-4 lg:flex-row lg:items-center lg:justify-between",
+            "no-print flex flex-col gap-4 border-b border-field-border p-4 lg:flex-row lg:items-center lg:justify-between",
+            !isEvaluation && "bg-field-mist/70",
             isEvaluation && "border-[#5d7896]/35 bg-[#081725]"
           )}
         >
@@ -487,7 +489,8 @@ export function PresentationMode({
               type="button"
               onClick={onSummary}
               className={cn(
-                "inline-flex items-center justify-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md",
+                "inline-flex items-center justify-center gap-2 rounded-xl border border-field-border px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md",
+                !isEvaluation && "bg-white",
                 isEvaluation && "border-[#5d7896]/55 bg-[#10263d] text-white hover:border-[#8ec2f4]"
               )}
             >
@@ -529,8 +532,8 @@ export function PresentationMode({
                 <article
                   key={`${item.label ?? "content"}-${index}`}
                   className={cn(
-                    "rounded-2xl border border-field-border bg-field-mist p-5 shadow-sm",
-                    slideIndex === 0 && "bg-white",
+                    "rounded-2xl border border-field-border p-5 shadow-sm",
+                    !isEvaluation && (slideIndex === 0 ? "bg-white" : "bg-field-mist"),
                     isEvaluation &&
                       "border-[#5d7896]/45 bg-[#10263d] text-white shadow-[0_18px_48px_rgba(2,10,22,0.22)]",
                     isEvaluation && slideIndex === 0 && "bg-[#123352]"
@@ -563,7 +566,8 @@ export function PresentationMode({
 
         <footer
           className={cn(
-            "flex flex-col gap-4 border-t border-field-border bg-white p-4 md:flex-row md:items-center md:justify-between",
+            "flex flex-col gap-4 border-t border-field-border p-4 md:flex-row md:items-center md:justify-between",
+            !isEvaluation && "bg-white",
             isEvaluation && "border-[#5d7896]/35 bg-[#081725]"
           )}
         >
@@ -605,7 +609,8 @@ export function PresentationMode({
               onClick={previous}
               disabled={slideIndex === 0}
               className={cn(
-                "inline-flex items-center gap-2 rounded-xl border border-field-border bg-white px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md disabled:opacity-45 disabled:hover:translate-y-0",
+                "inline-flex items-center gap-2 rounded-xl border border-field-border px-4 py-3 font-bold text-navy-800 shadow-sm transition hover:-translate-y-0.5 hover:border-un-blue hover:shadow-md disabled:opacity-45 disabled:hover:translate-y-0",
+                !isEvaluation && "bg-white",
                 isEvaluation && "border-[#5d7896]/55 bg-[#10263d] text-white hover:border-[#8ec2f4]"
               )}
             >
